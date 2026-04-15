@@ -63,6 +63,12 @@ body {
 .header-sub { font-size: 11px; opacity: 0.6; font-family: 'DM Mono', monospace; margin-top: 1px; }
 .header-date { font-family: 'DM Mono', monospace; font-size: 12px; opacity: 0.75; }
 
+/* CLOUD STATUS */
+.cloud-status { display:flex; align-items:center; gap:4px; font-size:12px; color:rgba(255,255,255,0.8); background:rgba(0,0,0,0.2); padding:4px 8px; border-radius:4px; transition: all 0.2s; }
+.cloud-status.synced { color: #A5D6A7; }
+.cloud-status.saving { color: #FFF59D; }
+.cloud-status.error { color: #EF9A9A; }
+
 /* LAYOUT */
 .layout {
   display: grid;
@@ -236,6 +242,12 @@ input[type="text"] { flex: 1; min-width: 140px; }
     <div class="header-sub">고등학교 담임 전용</div>
   </div>
   <div style="display:flex; align-items:center; gap: 12px;">
+    <!-- Cloud Status -->
+    <div id="cloud-status" class="cloud-status">
+      <span id="cloud-icon">💻</span>
+      <span id="cloud-text">로컬 모드</span>
+    </div>
+
     <!-- 학년도 수동 입력 폼 -->
     <div style="display:flex; align-items:center; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:6px; padding:4px 10px;">
       <input type="text" inputmode="numeric" pattern="[0-9]*" id="year-input" onchange="changeYear()" onkeyup="if(event.key==='Enter') this.blur()" style="background:transparent; color:white; border:none; width:45px; font-weight:700; font-family:inherit; font-size:14px; outline:none; text-align:right; padding:0;">
@@ -265,7 +277,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
     <!-- ===== 기본 설정 ===== -->
     <div id="page-setup" class="page active">
       <div class="page-title">기본 설정</div>
-      <div class="page-desc">청소 인원 수와 학생 명단을 설정하세요.</div>
+      <div class="page-desc">청소 인원 수와 학생 명단을 설정하세요. 변경 사항은 클라우드에 자동 저장됩니다.</div>
 
       <div class="card">
         <div class="card-title"><span class="card-title-icon">👥</span> 청소 인원 설정</div>
@@ -452,6 +464,20 @@ input[type="text"] { flex: 1; min-width: 140px; }
 <div class="toast" id="toast"></div>
 
 <script>
+// ===================== CLOUD UI LOGIC =====================
+function setCloudStatus(status) {
+  const el = document.getElementById('cloud-status');
+  const icon = document.getElementById('cloud-icon');
+  const text = document.getElementById('cloud-text');
+  
+  el.className = 'cloud-status ' + status;
+  if (status === 'saving') { icon.textContent = '⏳'; text.textContent = '저장 중...'; }
+  else if (status === 'synced') { icon.textContent = '☁️'; text.textContent = '동기화됨'; }
+  else if (status === 'error') { icon.textContent = '❌'; text.textContent = '오프라인/에러'; }
+  else if (status === 'loading') { icon.textContent = '🔄'; text.textContent = '불러오는 중...'; }
+  else { icon.textContent = '💻'; text.textContent = '로컬 모드'; }
+}
+
 // ===================== ACADEMIC YEAR LOGIC =====================
 let currentYear = new Date().getFullYear();
 const savedYear = localStorage.getItem('cleaning-app-last-year');
@@ -470,7 +496,7 @@ function changeYear() {
   const inp = document.getElementById('year-input');
   if(!inp.value) { inp.value = currentYear; return; }
   currentYear = parseInt(inp.value);
-  load(); // loads state for new year
+  load(); // loads state for new year locally
   
   // Update UI values
   document.getElementById('needed-count').value = state.neededCount;
@@ -485,6 +511,11 @@ function changeYear() {
   if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
   
   showToast(`${currentYear}학년도 데이터를 불러왔습니다.`);
+  
+  // Try to load from cloud if connected
+  if (window.firebaseUser && window.firestoreDb) {
+    syncFromCloud();
+  }
 }
 
 // ===================== STATE =====================
@@ -550,11 +581,32 @@ function load() {
   }
 }
 
+let cloudSaveTimer = null;
 function saveState() {
   const { resultViewMode, lastAssignments, lastGoHomeAll, lastAllCandidates, ...rest } = state;
+  
+  // Local Backup
   localStorage.setItem(getStorageKey(), JSON.stringify(rest));
   localStorage.setItem('cleaning-app-last-year', currentYear);
+
+  // Cloud Sync
+  if (window.firebaseUser && window.firestoreDb && window.firestoreFns) {
+    setCloudStatus('saving');
+    clearTimeout(cloudSaveTimer);
+    cloudSaveTimer = setTimeout(() => {
+      window.firestoreFns.setDoc(
+        window.firestoreFns.doc(window.firestoreDb, 'artifacts', window.firebaseAppId, 'users', window.firebaseUser.uid, 'cleaningState', String(currentYear)),
+        rest
+      ).then(() => {
+        setCloudStatus('synced');
+      }).catch(e => {
+        console.error("Cloud Save Error:", e);
+        setCloudStatus('error');
+      });
+    }, 1500); // 1.5초 디바운스로 잦은 저장 방지
+  }
 }
+
 function save() {
   state.neededCount = parseInt(document.getElementById('needed-count').value) || 6;
   state.classSize = parseInt(document.getElementById('class-size').value) || 30;
@@ -1092,7 +1144,7 @@ function saveToCalendar(isAuto = false) {
   });
   saveState();
   if (isAuto) {
-    showToast('배분 완료 및 캘린더에 자동 저장되었습니다! 🎲');
+    showToast('배분 완료 및 저장되었습니다! 🎲');
   } else {
     showToast('캘린더에 저장되었습니다!');
   }
@@ -1262,6 +1314,89 @@ function deleteRecordFromModal(dateStr, id) {
   deleteRecord(dateStr, id);
   closeModal();
 }
+
+// ===================== FIREBASE SYNC LOGIC =====================
+window.firebaseUser = null;
+window.firestoreDb = null;
+window.firestoreFns = {};
+window.firebaseAppId = 'default-app-id';
+
+async function syncFromCloud() {
+  if (!window.firebaseUser || !window.firestoreDb || !window.firestoreFns) return;
+  setCloudStatus('loading');
+  try {
+    const docRef = window.firestoreFns.doc(window.firestoreDb, 'artifacts', window.firebaseAppId, 'users', window.firebaseUser.uid, 'cleaningState', String(currentYear));
+    const docSnap = await window.firestoreFns.getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      const cloudData = docSnap.data();
+      // 기존 state에 클라우드 데이터 병합
+      Object.assign(state, cloudData);
+      
+      // 화면 갱신
+      document.getElementById('needed-count').value = state.neededCount;
+      document.getElementById('class-size').value = state.classSize;
+      renderStudentNames();
+      renderZones();
+      renderDutyPage();
+      
+      if (document.getElementById('page-result').classList.contains('active')) buildResult();
+      if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
+      
+      showToast(`${currentYear}학년도 클라우드 데이터를 불러왔습니다.`);
+    } else {
+      // 클라우드에 데이터가 없으면 현재 로컬 데이터를 클라우드에 최초 저장
+      saveState();
+    }
+    setCloudStatus('synced');
+  } catch (error) {
+    console.error("Cloud Fetch Error:", error);
+    setCloudStatus('error');
+  }
+}
+
+async function initFirebase() {
+  try {
+    // 캔버스 환경 변수에서 환경 설정 정보 불러오기
+    if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
+    const config = JSON.parse(__firebase_config);
+    if (typeof __app_id !== 'undefined') window.firebaseAppId = __app_id;
+
+    // Firebase 모듈 동적 임포트
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+    const { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+    const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+    window.firestoreFns = { doc, setDoc, getDoc };
+
+    const app = initializeApp(config);
+    const auth = getAuth(app);
+    window.firestoreDb = getFirestore(app);
+
+    // 로그인 토큰 인증 (토큰이 없으면 익명 로그인)
+    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+      await signInWithCustomToken(auth, __initial_auth_token);
+    } else {
+      await signInAnonymously(auth);
+    }
+
+    // 인증 상태 감지 후 초기 동기화 진행
+    onAuthStateChanged(auth, async (u) => {
+      window.firebaseUser = u;
+      if (u) {
+        await syncFromCloud();
+      }
+    });
+
+  } catch (e) {
+    console.error("Firebase init failed:", e);
+    setCloudStatus('error');
+  }
+}
+
+// 스크립트 로드 완료 시 Firebase 초기화 실행
+initFirebase();
+
 </script>
 </body>
 </html>
