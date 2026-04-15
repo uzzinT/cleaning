@@ -43,6 +43,7 @@ body {
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* HEADER */
@@ -58,28 +59,23 @@ body {
   top: 0;
   z-index: 100;
 }
-.header-title {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-.header-sub {
-  font-size: 11px;
-  opacity: 0.6;
-  font-family: 'DM Mono', monospace;
-  margin-top: 1px;
-}
-.header-date {
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  opacity: 0.75;
-}
+.header-title { font-size: 16px; font-weight: 700; letter-spacing: 0.03em; }
+.header-sub { font-size: 11px; opacity: 0.6; font-family: 'DM Mono', monospace; margin-top: 1px; }
+.header-date { font-family: 'DM Mono', monospace; font-size: 12px; opacity: 0.75; }
 
 /* LAYOUT */
 .layout {
   display: grid;
   grid-template-columns: 220px 1fr;
   min-height: calc(100vh - 56px);
+}
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { height: auto; border-right: none; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); padding: 10px; gap: 4px; position: static; }
+  .nav-group-label { display: none; }
+  .nav-btn { justify-content: center; padding: 8px; font-size: 12px; }
+  .nav-divider { display: none; }
+  .main { padding: 16px; }
 }
 
 /* SIDEBAR */
@@ -95,29 +91,12 @@ body {
   height: calc(100vh - 56px);
   overflow-y: auto;
 }
-.nav-group-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--text3);
-  text-transform: uppercase;
-  padding: 8px 12px 4px;
-}
+.nav-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text3); text-transform: uppercase; padding: 8px 12px 4px; }
 .nav-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: var(--radius-sm);
-  border: none;
-  background: none;
-  color: var(--text2);
-  cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px;
-  width: 100%;
-  text-align: left;
-  transition: all 0.15s;
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: var(--radius-sm); border: none; background: none;
+  color: var(--text2); cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; width: 100%; text-align: left; transition: all 0.15s;
 }
 .nav-btn:hover { background: var(--surface2); color: var(--text); }
 .nav-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
@@ -125,377 +104,127 @@ body {
 .nav-divider { height: 1px; background: var(--border); margin: 8px 0; }
 
 /* MAIN */
-.main {
-  padding: 28px 32px;
-  max-width: 900px;
-}
-
+.main { padding: 28px 32px; max-width: 900px; width: 100%; margin: 0 auto; }
 .page { display: none; }
-.page.active { display: block; }
+.page.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-.page-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: var(--text);
-}
-.page-desc {
-  font-size: 13px;
-  color: var(--text2);
-  margin-bottom: 24px;
-}
+.page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.page-desc { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
 
 /* CARDS */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow);
-}
-.card-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+.card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; }
 .card-title-icon { font-size: 16px; }
 
-/* FORM */
-.form-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.form-label {
-  font-size: 13px;
-  color: var(--text2);
-  min-width: 90px;
-  font-weight: 500;
-}
+/* FORM & BUTTONS */
+.form-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.form-label { font-size: 13px; color: var(--text2); min-width: 90px; font-weight: 500; }
 input[type="text"], input[type="number"], select {
-  padding: 7px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px;
-  outline: none;
-  transition: border 0.15s;
+  padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; outline: none; transition: border 0.15s;
 }
 input[type="text"]:focus, input[type="number"]:focus { border-color: var(--accent); }
 input[type="number"] { width: 80px; }
 input[type="text"] { flex: 1; min-width: 140px; }
-
-/* BUTTONS */
-.btn {
-  padding: 7px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
+.btn { padding: 7px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .btn:hover { background: var(--surface2); }
-.btn-accent {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
+.btn-accent { background: var(--accent); color: white; border-color: var(--accent); }
 .btn-accent:hover { opacity: 0.88; background: var(--accent); }
-.btn-sm {
-  padding: 4px 10px;
-  font-size: 12px;
-}
+.btn-sm { padding: 4px 10px; font-size: 12px; }
 .btn-danger { color: var(--danger); border-color: #E8B0AC; }
 .btn-danger:hover { background: var(--danger-light); }
-.btn-ghost { border: none; background: none; color: var(--text2); }
-.btn-ghost:hover { color: var(--text); background: var(--surface2); }
 
 /* TAGS / CHIPS */
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-}
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; transition: all 0.2s; }
 .chip-late { background: var(--late-bg); border: 1px solid var(--late-border); color: var(--late-text); }
 .chip-duty { background: var(--duty-bg); border: 1px solid var(--duty-border); color: var(--duty-text); }
 .chip-zone { background: #E8EFFE; border: 1px solid #7E99DC; color: #1A3070; }
-.chip-excluded { background: var(--surface2); border: 1px solid var(--border); color: var(--text3); text-decoration: line-through; }
-.chip-x { cursor: pointer; font-size: 11px; opacity: 0.6; line-height: 1; }
-.chip-x:hover { opacity: 1; }
+.chip-excluded { background: var(--surface2); border: 1px solid var(--border); color: var(--text3); text-decoration: line-through; opacity: 0.6; }
+.chip-x, .chip-edit { cursor: pointer; font-size: 11px; opacity: 0.6; line-height: 1; padding: 2px; }
+.chip-x:hover, .chip-edit:hover { opacity: 1; transform: scale(1.1); }
 .chip-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 
-/* STUDENT GRID (click-to-toggle) */
-.student-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 10px;
-}
-.student-tile {
-  padding: 5px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text2);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.12s;
-  user-select: none;
-}
-.student-tile:hover { border-color: var(--late-border); color: var(--text); }
-.student-tile.late {
-  background: var(--late-bg);
-  border-color: var(--late-border);
-  color: var(--late-text);
-  font-weight: 500;
-}
+/* GRIDS */
+.student-grid, .duty-student-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.student-tile, .duty-tile { padding: 5px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text2); font-size: 13px; cursor: pointer; transition: all 0.12s; user-select: none; }
+.student-tile:hover, .duty-tile:hover { border-color: var(--text3); color: var(--text); }
+.student-tile.late { background: var(--late-bg); border-color: var(--late-border); color: var(--late-text); font-weight: 500; }
+.duty-tile.selected { background: var(--duty-bg); border-color: var(--duty-border); color: var(--duty-text); font-weight: 500; }
 
-/* DAY SELECTOR */
-.day-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-.day-btn {
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text2);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
+/* DAY SELECTOR & TOGGLES */
+.day-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.day-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 13px; cursor: pointer; transition: all 0.15s; }
 .day-btn:hover { border-color: var(--accent); color: var(--accent); }
-.day-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-  font-weight: 500;
-}
-
-/* ZONE LIST (settings) */
-.zone-list { margin-top: 10px; }
-.zone-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-.zone-row:last-child { border-bottom: none; }
-.zone-name {
-  flex: 1;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-}
-.zone-count-label { font-size: 12px; color: var(--text2); }
-.zone-count-input { width: 60px; }
-
-/* DUTY ASSIGN */
-.duty-student-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 10px;
-}
-.duty-tile {
-  padding: 5px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text2);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.12s;
-  user-select: none;
-}
-.duty-tile:hover { border-color: var(--duty-border); color: var(--text); }
-.duty-tile.selected {
-  background: var(--duty-bg);
-  border-color: var(--duty-border);
-  color: var(--duty-text);
-  font-weight: 500;
-}
-
-/* TOGGLE GROUP (결과 뷰 전환용) */
-.toggle-group {
-  display: flex;
-  background: var(--surface2);
-  border-radius: var(--radius-sm);
-  padding: 4px;
-  width: fit-content;
-}
-.toggle-btn {
-  padding: 6px 14px;
-  border-radius: 4px;
-  border: none;
-  background: transparent;
-  color: var(--text2);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.toggle-btn.active {
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
+.day-btn.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 500; }
+.toggle-group { display: flex; background: var(--surface2); border-radius: var(--radius-sm); padding: 4px; width: fit-content; }
+.toggle-btn { padding: 6px 14px; border-radius: 4px; border: none; background: transparent; color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.toggle-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
 /* RESULT TABLE */
 .result-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-.result-table th {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  color: var(--text2);
-  text-transform: uppercase;
-  padding: 6px 10px;
-  text-align: left;
-  border-bottom: 2px solid var(--border);
-}
-.result-table td {
-  padding: 10px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
+.result-table th { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; color: var(--text2); text-transform: uppercase; padding: 6px 10px; text-align: left; border-bottom: 2px solid var(--border); }
+.result-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .result-table tr:last-child td { border-bottom: none; }
-.result-zone-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  min-width: 120px;
-}
+.result-zone-name { font-size: 14px; font-weight: 700; color: var(--text); min-width: 120px; }
 .result-persons { display: flex; flex-wrap: wrap; gap: 6px; }
-
-/* 칩 크기 상향 조정 */
-.result-chip {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-}
-.result-chip.clickable {
-  cursor: pointer;
-  transition: all 0.12s;
-}
+.result-chip { padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; }
+.result-chip.clickable { cursor: pointer; transition: all 0.12s; }
 .result-chip.clickable:hover { opacity: 0.75; text-decoration: line-through; }
 
 /* STATUS BADGE */
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-family: 'DM Mono', monospace;
-  white-space: nowrap;
-}
+.status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-family: 'DM Mono', monospace; white-space: nowrap; }
 .badge-ok { background: #E3EDE8; color: var(--accent); }
 .badge-warn { background: var(--warn-bg); color: var(--warn-text); }
 .badge-over { background: #FDECEA; color: var(--danger); }
 
-/* INFO BOX */
-.info-box {
-  background: var(--duty-bg);
-  border: 1px solid var(--duty-border);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  font-size: 13px;
-  color: var(--duty-text);
-  margin-bottom: 14px;
-}
-.warn-box {
-  background: var(--warn-bg);
-  border: 1px solid var(--warn-border);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  font-size: 13px;
-  color: var(--warn-text);
-  margin-bottom: 14px;
-}
-
-/* SUMMARY STAT */
-.stat-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  min-width: 110px;
-  flex: 1;
-}
+/* INFO BOX & STATS */
+.info-box { background: var(--duty-bg); border: 1px solid var(--duty-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--duty-text); margin-bottom: 14px; }
+.warn-box { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--warn-text); margin-bottom: 14px; }
+.stat-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 16px; min-width: 110px; flex: 1; }
 .stat-label { font-size: 11px; color: var(--text2); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .stat-val { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--text); margin-top: 2px; }
 .stat-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
-/* PRINT */
-@media print {
-  .sidebar, .header, .nav-btn, .btn, input, .student-grid { display: none !important; }
-  .layout { display: block; }
-  .main { padding: 0; max-width: 100%; }
-  .card { box-shadow: none; border: 1px solid #ccc; }
-  .page { display: block !important; }
-  #page-result { display: block !important; }
-  #page-setup, #page-zones, #page-duty, #page-today { display: none !important; }
-  .toggle-group { display: none !important; }
-}
+/* CALENDAR */
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-weight: 700; font-size: 16px; }
+.calendar-header button { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+.calendar-header button:hover { background: var(--surface2); }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-day-header { font-size: 11px; font-weight: 700; color: var(--text3); padding: 8px 0; }
+.cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid transparent; font-size: 14px; transition: all 0.15s; position: relative; }
+.cal-day:hover { background: var(--surface2); }
+.cal-day.active { background: var(--accent); color: white; font-weight: 700; }
+.cal-day.today { border-color: var(--accent); font-weight: 700; }
+.cal-day.other-month { opacity: 0.3; }
+.cal-dot { width: 6px; height: 6px; background: var(--danger); border-radius: 50%; position: absolute; bottom: 6px; }
 
-/* EMPTY */
+/* SWIPE TO DELETE */
+.swipe-container { position: relative; overflow: hidden; border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); }
+.swipe-content { background: var(--surface); padding: 12px 16px; position: relative; z-index: 2; transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.swipe-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; z-index: 1; }
+.swipe-del-btn { background: var(--danger); color: white; border: none; padding: 0 20px; font-weight: bold; cursor: pointer; width: 80px; text-align: center; }
+
+/* MODALS */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 900; backdrop-filter: blur(2px); }
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); padding: 24px; border-radius: var(--radius); z-index: 1000; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+.modal h3 { margin-bottom: 12px; font-size: 18px; color: var(--text); }
+.modal-large { min-width: 80vw; max-width: 900px; max-height: 85vh; overflow-y: auto; }
+
+/* OTHERS */
 .empty { font-size: 13px; color: var(--text3); padding: 12px 0; text-align: center; }
-
-/* SEPARATOR */
 .sep { height: 1px; background: var(--border); margin: 14px 0; }
-
-/* SCROLL */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.zone-list { margin-top: 10px; }
+.zone-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.zone-row:last-child { border-bottom: none; }
+.zone-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+.zone-count-label { font-size: 12px; color: var(--text2); }
+.zone-count-input { width: 60px; }
 
 /* TOAST */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--accent);
-  color: white;
-  padding: 10px 20px;
-  border-radius: var(--radius);
-  font-size: 13px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.25s;
-  pointer-events: none;
-  z-index: 999;
-}
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: white; padding: 10px 20px; border-radius: var(--radius); font-size: 13px; opacity: 0; transform: translateY(8px); transition: all 0.25s; pointer-events: none; z-index: 9999; }
 .toast.show { opacity: 1; transform: translateY(0); }
 </style>
 </head>
@@ -506,31 +235,28 @@ input[type="text"] { flex: 1; min-width: 140px; }
     <div class="header-title">🧹 청소 배분 시스템</div>
     <div class="header-sub">고등학교 담임 전용</div>
   </div>
-  <div class="header-date" id="today-date"></div>
+  <div style="display:flex; align-items:center; gap: 12px;">
+    <!-- 학년도 수동 입력 폼 (글씨 깨짐 해결을 위해 일반 텍스트 모드로 수정) -->
+    <div style="display:flex; align-items:center; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:6px; padding:4px 10px;">
+      <input type="text" inputmode="numeric" pattern="[0-9]*" id="year-input" onchange="changeYear()" onkeyup="if(event.key==='Enter') this.blur()" style="background:transparent; color:white; border:none; width:45px; font-weight:700; font-family:inherit; font-size:14px; outline:none; text-align:right; padding:0;">
+      <span style="color:rgba(255,255,255,0.9); font-size:13px; margin-left:4px; font-weight:500;">학년도</span>
+    </div>
+    <div class="header-date" id="today-date"></div>
+  </div>
 </header>
 
 <div class="layout">
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="nav-group-label">설정</div>
-    <button class="nav-btn active" onclick="showPage('setup', this)">
-      <span class="nav-icon">⚙️</span> 기본 설정
-    </button>
-    <button class="nav-btn" onclick="showPage('zones', this)">
-      <span class="nav-icon">🗂️</span> 청소 구역
-    </button>
-    <button class="nav-btn" onclick="showPage('duty', this)">
-      <span class="nav-icon">📋</span> 요일별 청소당번
-    </button>
+    <button class="nav-btn active" onclick="showPage('setup', this)"><span class="nav-icon">⚙️</span> 기본 설정</button>
+    <button class="nav-btn" onclick="showPage('zones', this)"><span class="nav-icon">🗂️</span> 청소 구역</button>
+    <button class="nav-btn" onclick="showPage('duty', this)"><span class="nav-icon">📋</span> 요일별 당번</button>
     <div class="nav-divider"></div>
     <div class="nav-group-label">오늘</div>
-    <button class="nav-btn" onclick="showPage('today', this)">
-      <span class="nav-icon">🙋</span> 지각생 등록
-    </button>
-    <button class="nav-btn" onclick="showPage('result', this)">
-      <span class="nav-icon">✅</span> 청소 배분 결과
-    </button>
+    <button class="nav-btn" onclick="showPage('result', this)"><span class="nav-icon">✅</span> 청소 배분</button>
     <div class="nav-divider"></div>
+    <button class="nav-btn" onclick="showPage('calendar', this); renderCalendar();"><span class="nav-icon">📅</span> 캘린더 (기록)</button>
   </nav>
 
   <!-- MAIN -->
@@ -548,9 +274,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
           <input type="number" id="needed-count" value="6" min="1" max="50" oninput="save()">
           <span style="font-size:13px;color:var(--text2)">명</span>
         </div>
-        <div style="font-size:12px;color:var(--text3);margin-top:-4px;margin-bottom:8px;padding-left:100px">
-          ※ 지각생 우선 배정 → 부족 시 요일별 당번으로 보충
-        </div>
+        <div style="font-size:12px;color:var(--text3);margin-top:-4px;margin-bottom:8px;padding-left:100px">※ 지각생 우선 배정 → 부족 시 요일별 당번으로 보충</div>
         <div class="form-row">
           <span class="form-label">반 학생 수</span>
           <input type="number" id="class-size" value="30" min="1" max="60" oninput="onClassSizeChange()">
@@ -566,9 +290,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
           <button class="btn btn-danger btn-sm" onclick="clearStudentNames()">전체 초기화</button>
         </div>
         <div id="student-names-list" class="chip-grid"></div>
-        <div style="margin-top:12px;font-size:12px;color:var(--text3)">
-          명단 없이 번호(1번~N번)로 사용하려면 이름을 입력하지 않아도 됩니다.
-        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--text3)">이름을 입력하지 않아도 번호(1번~N번)로 자동 사용됩니다.</div>
       </div>
     </div>
 
@@ -580,7 +302,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
       <div class="card">
         <div class="card-title"><span class="card-title-icon">➕</span> 구역 추가</div>
         <div class="form-row">
-          <input type="text" id="zone-input" placeholder="구역명 (예: 교실 앞, 복도, 화장실)" onkeydown="if(event.key==='Enter')addZone()">
+          <input type="text" id="zone-input" placeholder="구역명 (예: 교실 앞, 복도)" onkeydown="if(event.key==='Enter')addZone()">
           <input type="number" id="zone-count-input" value="1" min="1" max="10" style="width:70px" onkeydown="if(event.key==='Enter')addZone()">
           <span style="font-size:13px;color:var(--text2)">명</span>
           <button class="btn btn-accent" onclick="addZone()">추가</button>
@@ -609,39 +331,30 @@ input[type="text"] { flex: 1; min-width: 140px; }
       </div>
     </div>
 
-    <!-- ===== 지각생 등록 ===== -->
-    <div id="page-today" class="page">
-      <div class="page-title">오늘 지각생 등록</div>
-      <div class="page-desc">지각한 학생을 클릭해서 선택하세요. 다시 클릭하면 해제됩니다.</div>
-
-      <div class="day-row" id="today-day-row"></div>
-
-      <div class="card">
-        <div class="card-title"><span class="card-title-icon">🙋</span> 학생 명단 (클릭하여 지각 표시)</div>
-        <div id="late-student-grid" class="student-grid"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span class="card-title-icon">🚨</span> 지각생 목록</div>
-        <div id="late-selected-list" class="chip-grid">
-          <div class="empty">지각생이 없습니다</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-        <button class="btn" onclick="clearLate()">지각생 초기화</button>
-        <button class="btn btn-accent" onclick="state.dutyZonesInitialized=false; showPage('result', document.querySelectorAll('.nav-btn')[4]); buildResult()">배분 결과 보기 →</button>
-      </div>
-    </div>
-
     <!-- ===== 배분 결과 ===== -->
     <div id="page-result" class="page">
       <div class="page-title">청소 배분</div>
       <div class="page-desc" id="result-desc"></div>
 
       <div class="stat-row" id="stat-row"></div>
-
       <div id="result-info-box"></div>
+
+      <!-- TODAY'S LATE (결과창에서 바로 등록) -->
+      <div class="card" id="today-late-card">
+        <div class="card-title" style="justify-content: space-between; margin-bottom: 8px;">
+          <div style="display:flex; align-items:center; gap:8px;"><span class="card-title-icon">🚨</span> 오늘의 지각생 관리</div>
+          <button class="btn btn-sm btn-danger" onclick="clearLate()">전체 초기화</button>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px">전체 학생 중 지각생을 클릭하여 추가하거나 뺄 수 있습니다.</div>
+        <div id="result-late-grid" class="student-grid"></div>
+      </div>
+
+      <!-- TODAY'S DUTY (결석 체크용) -->
+      <div class="card" id="today-duty-card">
+        <div class="card-title"><span class="card-title-icon">🙋</span> 오늘의 당번 (결석 체크)</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px">결석한 당번이 있다면 <b>클릭하여 오늘 청소에서 완전히 제외</b>하세요.</div>
+        <div id="result-duty-chips" class="chip-grid"></div>
+      </div>
 
       <!-- STEP 1: 구역 유형 설정 -->
       <div class="card" id="zone-type-card">
@@ -653,19 +366,17 @@ input[type="text"] { flex: 1; min-width: 140px; }
       <!-- STEP 2: 배분 버튼 -->
       <div style="display:flex;gap:10px;justify-content:center;margin-bottom:20px">
         <button class="btn btn-accent" id="distribute-btn" onclick="distributeNow()" style="padding:12px 40px;font-size:15px;font-weight:700;border-radius:8px">
-          🎲 배분!
+          🎲 배분! (자동 저장)
         </button>
       </div>
 
       <!-- STEP 3: 결과 -->
       <div class="card" id="result-output-card" style="display:none">
-        
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
           <div>
             <div class="card-title" style="margin-bottom:4px;"><span class="card-title-icon">✅</span> 청소 구역별 배분 결과</div>
-            <div style="font-size:12px;color:var(--text2);">배분된 인원(칩)을 클릭하면 청소에서 제외할 수 있습니다.</div>
+            <div style="font-size:12px;color:var(--text2);">배분된 인원(칩)을 클릭하면 청소에서 수동 제외할 수 있습니다.</div>
           </div>
-          <!-- 뷰 전환 토글 -->
           <div class="toggle-group" id="result-view-toggle">
             <button class="toggle-btn" id="btn-view-zone" onclick="switchResultView('zone')">🗂️ 구역별</button>
             <button class="toggle-btn active" id="btn-view-student" onclick="switchResultView('student')">🔢 번호순</button>
@@ -681,14 +392,94 @@ input[type="text"] { flex: 1; min-width: 140px; }
       </div>
     </div>
 
+    <!-- ===== 캘린더 (기록) ===== -->
+    <div id="page-calendar" class="page">
+      <div class="page-title">캘린더 (기록)</div>
+      <div class="page-desc">매일 자동 저장된 결과를 캘린더에서 확인하세요. 목록을 왼쪽으로 밀면(스와이프) 삭제할 수 있습니다.</div>
+
+      <div class="card">
+        <div class="calendar-header">
+          <button onclick="changeMonth(-1)">◀</button>
+          <div id="cal-month-title"></div>
+          <button onclick="changeMonth(1)">▶</button>
+        </div>
+        <div class="calendar-grid">
+          <div class="cal-day-header">일</div><div class="cal-day-header">월</div><div class="cal-day-header">화</div>
+          <div class="cal-day-header">수</div><div class="cal-day-header">목</div><div class="cal-day-header">금</div><div class="cal-day-header">토</div>
+        </div>
+        <div class="calendar-grid" id="cal-grid"></div>
+      </div>
+
+      <div class="card" id="cal-records-card" style="display:none;">
+        <div class="card-title" id="cal-records-title"></div>
+        <div id="cal-records-list"></div>
+      </div>
+    </div>
+
   </main>
+</div>
+
+<!-- Edit Name Modal -->
+<div id="modal-overlay" class="modal-overlay" style="display:none" onclick="closeModal()"></div>
+<div id="edit-name-modal" class="modal" style="display:none">
+  <h3>학생 이름 수정</h3>
+  <input type="text" id="edit-name-input" style="width:100%; margin:10px 0; padding:10px;">
+  <input type="hidden" id="edit-name-idx">
+  <div style="display:flex; justify-content:flex-end; gap:8px;">
+    <button class="btn" onclick="closeModal()">취소</button>
+    <button class="btn btn-accent" onclick="saveEditedName()">저장</button>
+  </div>
+</div>
+
+<!-- History Detail Modal -->
+<div id="history-modal" class="modal modal-large" style="display:none">
+  <h3 id="history-modal-title"></h3>
+  <div id="history-modal-content" style="margin:16px 0;"></div>
+  <div style="display:flex; justify-content:flex-end; gap:8px;" id="history-modal-footer">
+    <!-- Buttons injected via JS -->
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+// ===================== ACADEMIC YEAR LOGIC =====================
+let currentYear = new Date().getFullYear();
+const savedYear = localStorage.getItem('cleaning-app-last-year');
+if (savedYear) currentYear = parseInt(savedYear);
+
+function getStorageKey() {
+  return `cleaning-app-state-v3-${currentYear}`;
+}
+
+function initYearInput() {
+  const inp = document.getElementById('year-input');
+  inp.value = currentYear;
+}
+
+function changeYear() {
+  const inp = document.getElementById('year-input');
+  if(!inp.value) { inp.value = currentYear; return; }
+  currentYear = parseInt(inp.value);
+  load(); // loads state for new year
+  
+  // Update UI values
+  document.getElementById('needed-count').value = state.neededCount;
+  document.getElementById('class-size').value = state.classSize;
+  
+  // Re-render all views
+  renderStudentNames();
+  renderZones();
+  renderDutyPage();
+  
+  if (document.getElementById('page-result').classList.contains('active')) buildResult();
+  if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
+  
+  showToast(`${currentYear}학년도 데이터를 불러왔습니다.`);
+}
+
 // ===================== STATE =====================
-const DAYS = ['월','화','수','목','금'];
+const DAYS = ['월','화','수','목','금','토','일'];
 const DEFAULT_ZONES = [
   {name:'교실 앞', count:1},
   {name:'교실 뒤', count:1},
@@ -697,37 +488,64 @@ const DEFAULT_ZONES = [
   {name:'특별구역', count:1},
 ];
 
-let state = {
-  neededCount: 6,
-  classSize: 30,
-  studentNames: [],
-  zones: JSON.parse(JSON.stringify(DEFAULT_ZONES)),
-  duty: { 월:[], 화:[], 수:[], 목:[], 금:[] },
-  lateStudents: [],
-  todayDay: DAYS[new Date().getDay() - 1] || '월',
-  dutyDay: '월',
-  excludedInResult: [],
-  dutyZones: [],  // which zones are assigned to duty students
-  
-  // 렌더링 뷰 관리를 위한 상태 추가
-  resultViewMode: 'student',
-  lastAssignments: null,
-  lastGoHomeAll: null,
-  lastAllCandidates: null
-};
+let state = {};
+
+// Calendar State
+let calCurrentDate = new Date();
+let calSelectedDateStr = "";
+
+// Helper for local date string (YYYY-MM-DD)
+function getLocalDateString(dateObj) {
+  return dateObj.getFullYear() + '-' + String(dateObj.getMonth()+1).padStart(2,'0') + '-' + String(dateObj.getDate()).padStart(2,'0');
+}
 
 function load() {
-  const saved = localStorage.getItem('cleaning-app-state');
+  // 1. Reset state to defaults
+  state = {
+    neededCount: 6,
+    classSize: 30,
+    studentNames: [],
+    zones: JSON.parse(JSON.stringify(DEFAULT_ZONES)),
+    duty: { 월:[], 화:[], 수:[], 목:[], 금:[] },
+    lateStudents: [],
+    todayDay: ['일','월','화','수','목','금','토'][new Date().getDay()],
+    dutyDay: '월',
+    excludedInResult: [],
+    dutyZones: [],
+    resultViewMode: 'student',
+    history: {},
+    lastDate: getLocalDateString(new Date()),
+    lastAssignments: null,
+    lastGoHomeAll: null,
+    lastAllCandidates: null
+  };
+  
+  // 2. Load from storage
+  const saved = localStorage.getItem(getStorageKey());
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      // 복원 시 뷰 상태 및 렌더링 데이터는 캐시하지 않음(초기화)
       const { resultViewMode, lastAssignments, lastGoHomeAll, lastAllCandidates, ...rest } = parsed;
-      state = Object.assign(state, rest);
+      Object.assign(state, rest);
     } catch(e) {}
+  }
+
+  // 3. Auto-reset daily (날짜 변경 시 지각생 초기화)
+  const todayStr = getLocalDateString(new Date());
+  if (state.lastDate !== todayStr) {
+    state.lateStudents = [];
+    state.excludedInResult = []; // 제외된 인원도 리셋
+    state.todayDay = ['일','월','화','수','목','금','토'][new Date().getDay()];
+    state.lastDate = todayStr;
+    saveState();
   }
 }
 
+function saveState() {
+  const { resultViewMode, lastAssignments, lastGoHomeAll, lastAllCandidates, ...rest } = state;
+  localStorage.setItem(getStorageKey(), JSON.stringify(rest));
+  localStorage.setItem('cleaning-app-last-year', currentYear);
+}
 function save() {
   state.neededCount = parseInt(document.getElementById('needed-count').value) || 6;
   state.classSize = parseInt(document.getElementById('class-size').value) || 30;
@@ -735,18 +553,13 @@ function save() {
   showToast('저장되었습니다');
 }
 
-function saveState() {
-  // 휘발성 렌더링 데이터는 제외하고 저장
-  const { resultViewMode, lastAssignments, lastGoHomeAll, lastAllCandidates, ...rest } = state;
-  localStorage.setItem('cleaning-app-state', JSON.stringify(rest));
-}
-
 // ===================== INIT =====================
+initYearInput();
 load();
 
 const todayD = new Date();
 document.getElementById('today-date').textContent =
-  todayD.getFullYear() + '.' + String(todayD.getMonth()+1).padStart(2,'0') + '.' + String(todayD.getDate()).padStart(2,'0') + ' (' + (DAYS[todayD.getDay()-1] || '?') + ')';
+  todayD.getFullYear() + '.' + String(todayD.getMonth()+1).padStart(2,'0') + '.' + String(todayD.getDate()).padStart(2,'0');
 
 document.getElementById('needed-count').value = state.neededCount;
 document.getElementById('class-size').value = state.classSize;
@@ -754,7 +567,8 @@ document.getElementById('class-size').value = state.classSize;
 renderStudentNames();
 renderZones();
 renderDutyPage();
-renderTodayPage();
+
+if (document.getElementById('page-result').classList.contains('active')) buildResult();
 
 // ===================== NAV =====================
 function showPage(name, btn) {
@@ -762,13 +576,15 @@ function showPage(name, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   if (btn) btn.classList.add('active');
+  
+  // Result 탭 진입 시 자동 업데이트
   if (name === 'result') {
     state.dutyZonesInitialized = false; 
     buildResult();
   }
 }
 
-// ===================== TOAST =====================
+// ===================== TOAST & MODAL =====================
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -778,13 +594,18 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
 }
 
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+}
+
 // ===================== STUDENTS =====================
-function getStudentLabel(i) {
-  return state.studentNames[i] || (i+1) + '번';
+function getStudentLabel(i, customNamesArr = null) {
+  const names = customNamesArr || state.studentNames;
+  return names[i] || (i+1) + '번';
 }
 function getStudentList() {
-  const size = state.classSize;
-  return Array.from({length: size}, (_, i) => getStudentLabel(i));
+  return Array.from({length: state.classSize}, (_, i) => getStudentLabel(i));
 }
 
 function addStudentName() {
@@ -795,7 +616,8 @@ function addStudentName() {
   saveState();
   renderStudentNames();
   renderDutyStudentGrid();
-  renderLateStudentGrid();
+  renderResultLateGrid();
+  if (document.getElementById('page-result').classList.contains('active')) buildResult();
   inp.value = '';
 }
 function removeStudentName(i) {
@@ -803,32 +625,61 @@ function removeStudentName(i) {
   saveState();
   renderStudentNames();
   renderDutyStudentGrid();
-  renderLateStudentGrid();
+  renderResultLateGrid();
+  if (document.getElementById('page-result').classList.contains('active')) buildResult();
 }
 function clearStudentNames() {
   state.studentNames = [];
   saveState();
   renderStudentNames();
   renderDutyStudentGrid();
-  renderLateStudentGrid();
+  renderResultLateGrid();
+  if (document.getElementById('page-result').classList.contains('active')) buildResult();
   showToast('전체 학생 명단이 초기화되었습니다');
 }
 function onClassSizeChange() {
   state.classSize = parseInt(document.getElementById('class-size').value) || 30;
   saveState();
   renderDutyStudentGrid();
-  renderLateStudentGrid();
+  renderResultLateGrid();
+  if (document.getElementById('page-result').classList.contains('active')) buildResult();
   showToast('저장되었습니다');
+}
+
+// Name Edit
+function openNameModal(idx) {
+  document.getElementById('edit-name-idx').value = idx;
+  document.getElementById('edit-name-input').value = state.studentNames[idx] || '';
+  document.getElementById('modal-overlay').style.display = 'block';
+  document.getElementById('edit-name-modal').style.display = 'block';
+  document.getElementById('edit-name-input').focus();
+}
+function saveEditedName() {
+  const idx = parseInt(document.getElementById('edit-name-idx').value);
+  const newName = document.getElementById('edit-name-input').value.trim();
+  if (newName) {
+    state.studentNames[idx] = newName;
+    saveState();
+    renderStudentNames();
+    renderDutyStudentGrid();
+    renderResultLateGrid();
+    if (document.getElementById('page-result').classList.contains('active')) buildResult();
+    showToast('이름이 수정되었습니다');
+  }
+  closeModal();
 }
 
 function renderStudentNames() {
   const el = document.getElementById('student-names-list');
   if (!state.studentNames.length) {
-    el.innerHTML = '<div class="empty">이름을 입력하지 않으면 번호로 표시됩니다</div>';
+    el.innerHTML = ''; 
     return;
   }
   el.innerHTML = state.studentNames.map((n, i) =>
-    `<span class="chip chip-duty">${n} <span class="chip-x" onclick="removeStudentName(${i})">✕</span></span>`
+    `<span class="chip chip-duty">${n} 
+      <span class="chip-edit" onclick="openNameModal(${i})" title="수정">✏️</span>
+      <span class="chip-x" onclick="removeStudentName(${i})" title="삭제">✕</span>
+    </span>`
   ).join('');
 }
 
@@ -842,31 +693,23 @@ function addZone() {
   state.zones.push({name, count: cnt});
   saveState();
   renderZones();
-  nameInp.value = '';
-  cntInp.value = 1;
+  nameInp.value = ''; cntInp.value = 1;
   showToast('구역이 추가되었습니다');
 }
 function removeZone(i) {
-  state.zones.splice(i, 1);
-  saveState();
-  renderZones();
+  state.zones.splice(i, 1); saveState(); renderZones();
 }
 function updateZoneCount(i, val) {
-  state.zones[i].count = parseInt(val) || 1;
-  saveState();
+  state.zones[i].count = parseInt(val) || 1; saveState();
 }
 function renderZones() {
   const el = document.getElementById('zone-list');
-  if (!state.zones.length) {
-    el.innerHTML = '<div class="empty">구역을 추가해주세요</div>';
-    return;
-  }
+  if (!state.zones.length) { el.innerHTML = '<div class="empty">구역을 추가해주세요</div>'; return; }
   el.innerHTML = state.zones.map((z, i) => `
     <div class="zone-row">
       <span class="zone-name">${z.name}</span>
       <span class="zone-count-label">인원</span>
-      <input class="zone-count-input" type="number" value="${z.count}" min="1" max="20"
-        onchange="updateZoneCount(${i}, this.value)" style="width:60px">
+      <input class="zone-count-input" type="number" value="${z.count}" min="1" max="20" onchange="updateZoneCount(${i}, this.value)">
       <span style="font-size:12px;color:var(--text2)">명</span>
       <button class="btn btn-sm btn-danger" onclick="removeZone(${i})">삭제</button>
     </div>
@@ -876,23 +719,18 @@ function renderZones() {
 // ===================== DUTY =====================
 function renderDutyPage() {
   const row = document.getElementById('duty-day-row');
-  row.innerHTML = DAYS.map(d =>
+  row.innerHTML = ['월','화','수','목','금'].map(d =>
     `<button class="day-btn ${d===state.dutyDay?'active':''}" onclick="setDutyDay('${d}')">${d}요일</button>`
   ).join('');
   renderDutyStudentGrid();
   renderDutySelectedChips();
-  document.getElementById('duty-assign-title').innerHTML =
-    `<span class="card-title-icon">📋</span> ${state.dutyDay}요일 당번 지정`;
+  document.getElementById('duty-assign-title').innerHTML = `<span class="card-title-icon">📋</span> ${state.dutyDay}요일 당번 지정`;
 }
-function setDutyDay(d) {
-  state.dutyDay = d;
-  renderDutyPage();
-}
+function setDutyDay(d) { state.dutyDay = d; renderDutyPage(); }
 function renderDutyStudentGrid() {
   const students = getStudentList();
   const selected = state.duty[state.dutyDay] || [];
-  const el = document.getElementById('duty-student-grid');
-  el.innerHTML = students.map((s, i) => {
+  document.getElementById('duty-student-grid').innerHTML = students.map((s, i) => {
     const isSel = selected.includes(i);
     return `<div class="duty-tile ${isSel?'selected':''}" onclick="toggleDuty(${i})">${s}</div>`;
   }).join('');
@@ -901,81 +739,60 @@ function toggleDuty(idx) {
   if (!state.duty[state.dutyDay]) state.duty[state.dutyDay] = [];
   const arr = state.duty[state.dutyDay];
   const pos = arr.indexOf(idx);
-  if (pos >= 0) arr.splice(pos, 1);
-  else arr.push(idx);
-  saveState();
-  renderDutyStudentGrid();
-  renderDutySelectedChips();
+  if (pos >= 0) arr.splice(pos, 1); else arr.push(idx);
+  saveState(); renderDutyStudentGrid(); renderDutySelectedChips();
 }
 function renderDutySelectedChips() {
   const el = document.getElementById('duty-selected-chips');
   const selected = state.duty[state.dutyDay] || [];
-  if (!selected.length) {
-    el.innerHTML = '<div class="empty">지정된 당번이 없습니다</div>';
-    return;
-  }
-  el.innerHTML = selected.map(i =>
-    `<span class="chip chip-duty">${getStudentLabel(i)}</span>`
-  ).join('');
+  if (!selected.length) { el.innerHTML = '<div class="empty">지정된 당번이 없습니다</div>'; return; }
+  el.innerHTML = selected.map(i => `<span class="chip chip-duty">${getStudentLabel(i)}</span>`).join('');
 }
-
 function clearDutyDay() {
-  state.duty[state.dutyDay] = [];
-  saveState();
-  renderDutyPage();
+  state.duty[state.dutyDay] = []; saveState(); renderDutyPage();
   showToast(`${state.dutyDay}요일 당번이 초기화되었습니다`);
 }
 
 // ===================== TODAY / LATE =====================
-function renderTodayPage() {
-  const row = document.getElementById('today-day-row');
-  row.innerHTML = DAYS.map(d =>
-    `<button class="day-btn ${d===state.todayDay?'active':''}" onclick="setTodayDay('${d}')">${d}요일</button>`
-  ).join('');
-  renderLateStudentGrid();
-  renderLateSelectedList();
+// Result 탭에서도 사용하기 위해 지각 토글 공통화
+function toggleLate(idx) {
+  const pos = state.lateStudents.indexOf(idx);
+  if (pos >= 0) state.lateStudents.splice(pos, 1); else state.lateStudents.push(idx);
+  saveState(); 
+  renderResultLateGrid(); 
+  
+  if (document.getElementById('page-result').classList.contains('active')) {
+    buildResult(); // Update the result tab pre-stats instantly
+  }
 }
-function setTodayDay(d) {
-  state.todayDay = d;
+
+function clearLate() {
+  state.lateStudents = []; state.excludedInResult = [];
+  saveState(); 
+  renderResultLateGrid(); 
+  if (document.getElementById('page-result').classList.contains('active')) buildResult();
+  showToast('지각생이 전체 초기화되었습니다');
+}
+
+// ===================== RESULT / DISTRIBUTE =====================
+function toggleExcludePreDist(idx) {
+  const pos = state.excludedInResult.indexOf(idx);
+  if (pos >= 0) state.excludedInResult.splice(pos, 1);
+  else state.excludedInResult.push(idx);
   saveState();
-  renderTodayPage();
+  buildResult(); // Update UI
 }
-function renderLateStudentGrid() {
+
+function renderResultLateGrid() {
   const students = getStudentList();
-  const el = document.getElementById('late-student-grid');
+  const el = document.getElementById('result-late-grid');
+  if (!el) return;
   el.innerHTML = students.map((s, i) => {
     const isLate = state.lateStudents.includes(i);
     return `<div class="student-tile ${isLate?'late':''}" onclick="toggleLate(${i})">${s}</div>`;
   }).join('');
 }
-function toggleLate(idx) {
-  const pos = state.lateStudents.indexOf(idx);
-  if (pos >= 0) state.lateStudents.splice(pos, 1);
-  else state.lateStudents.push(idx);
-  saveState();
-  renderLateStudentGrid();
-  renderLateSelectedList();
-}
-function renderLateSelectedList() {
-  const el = document.getElementById('late-selected-list');
-  if (!state.lateStudents.length) {
-    el.innerHTML = '<div class="empty">지각생이 없습니다</div>';
-    return;
-  }
-  el.innerHTML = state.lateStudents.map(i =>
-    `<span class="chip chip-late">🚨 ${getStudentLabel(i)} <span class="chip-x" onclick="toggleLate(${i})">✕</span></span>`
-  ).join('');
-}
-function clearLate() {
-  state.lateStudents = [];
-  state.excludedInResult = [];
-  saveState();
-  renderLateStudentGrid();
-  renderLateSelectedList();
-  showToast('지각생이 초기화되었습니다');
-}
 
-// ===================== RESULT =====================
 function buildResult() {
   state.excludedInResult = state.excludedInResult || [];
   const needed = state.neededCount;
@@ -983,60 +800,48 @@ function buildResult() {
   const dutyIdxs = (state.duty[state.todayDay] || []).slice();
   const zones = state.zones;
 
+  // 0. Render Result Late Grid
+  renderResultLateGrid();
+
+  // 1. Render Today's Duty Chips (For absence checking)
+  const dutyChipsEl = document.getElementById('result-duty-chips');
+  if (!dutyIdxs.length) {
+    dutyChipsEl.innerHTML = '<div class="empty">오늘 지정된 당번이 없습니다.</div>';
+  } else {
+    dutyChipsEl.innerHTML = dutyIdxs.map(i => {
+      const isExc = state.excludedInResult.includes(i);
+      const cls = isExc ? 'chip-excluded' : 'chip-duty';
+      return `<span class="chip ${cls} clickable" onclick="toggleExcludePreDist(${i})" title="클릭하여 제외/복구">${getStudentLabel(i)}</span>`;
+    }).join('');
+  }
+
+  // 2. Stats
   const bothCount = lateIdxs.filter(i => dutyIdxs.includes(i)).length;
   const lateAvailCount = lateIdxs.filter(i => !state.excludedInResult.includes(i)).length;
   const dutyAvailCount = dutyIdxs.filter(i => !state.excludedInResult.includes(i)).length;
   const totalAvail = lateAvailCount + dutyAvailCount;
   const shortage = needed - totalAvail;
 
-  const statRow = document.getElementById('stat-row');
-  statRow.innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">필요 인원</div>
-      <div class="stat-val">${needed}</div>
-      <div class="stat-sub">명</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">지각생</div>
-      <div class="stat-val" style="color:var(--late-text)">${lateIdxs.length}</div>
-      <div class="stat-sub">명${bothCount ? ` (당번 겹침 ${bothCount}명)` : ''}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">${state.todayDay}요일 당번</div>
-      <div class="stat-val" style="color:var(--duty-text)">${dutyIdxs.length}</div>
-      <div class="stat-sub">명</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">배정 가능</div>
-      <div class="stat-val">${totalAvail}</div>
-      <div class="stat-sub">지각 ${lateAvailCount} + 당번 ${dutyAvailCount}</div>
-    </div>
+  document.getElementById('stat-row').innerHTML = `
+    <div class="stat-card"><div class="stat-label">필요 인원</div><div class="stat-val">${needed}</div><div class="stat-sub">명</div></div>
+    <div class="stat-card"><div class="stat-label">지각생</div><div class="stat-val" style="color:var(--late-text)">${lateIdxs.length}</div><div class="stat-sub">명${bothCount ? ` (당번 겹침 ${bothCount}명)` : ''}</div></div>
+    <div class="stat-card"><div class="stat-label">${state.todayDay}요일 당번</div><div class="stat-val" style="color:var(--duty-text)">${dutyIdxs.length}</div><div class="stat-sub">명</div></div>
+    <div class="stat-card"><div class="stat-label">배정 가능</div><div class="stat-val">${totalAvail}</div><div class="stat-sub">지각 ${lateAvailCount} + 당번 ${dutyAvailCount}</div></div>
   `;
 
-  const infoEl = document.getElementById('result-info-box');
   let infoHtml = '';
-  if (bothCount > 0) {
-    infoHtml += `<div class="info-box">ℹ️ 지각생이면서 당번인 학생 ${bothCount}명은 두 풀에 각각 포함되어 최대 2구역 청소할 수 있습니다.</div>`;
-  }
-  if (shortage > 0) {
-    infoHtml += `<div class="warn-box">⚠️ 필요 인원(${needed}명)보다 ${shortage}명이 부족합니다.</div>`;
-  } else if (totalAvail > needed) {
-    infoHtml += `<div class="info-box">✅ 배정 가능 ${totalAvail}명 중 ${needed}명 배정. 초과 인원은 귀가합니다.</div>`;
-  } else {
-    infoHtml += `<div class="info-box">✅ 인원이 딱 맞습니다. (${needed}명)</div>`;
-  }
-  infoEl.innerHTML = infoHtml;
+  if (bothCount > 0) infoHtml += `<div class="info-box">ℹ️ 지각생이면서 당번인 학생 ${bothCount}명은 두 역할에 각각 포함되어 최대 2구역 청소할 수 있습니다.</div>`;
+  if (shortage > 0) infoHtml += `<div class="warn-box">⚠️ 필요 인원(${needed}명)보다 ${shortage}명이 부족합니다.</div>`;
+  
+  document.getElementById('result-info-box').innerHTML = infoHtml;
+  document.getElementById('result-desc').textContent = `${state.todayDay}요일 · 구역 ${zones.length}개`;
 
-  document.getElementById('result-desc').textContent =
-    `${state.todayDay}요일 · 구역 ${zones.length}개`;
-
-  // 구역 유형 자동화 기능 삭제 -> 항상 '지각생 담당'이 기본값이 되도록 빈 배열로 초기화
+  // Always default to Late
   if (!state.dutyZonesInitialized) {
     state.dutyZones = [];
     state.dutyZonesInitialized = true;
     saveState();
   }
-
   renderZoneTypeChips(zones);
 
   document.getElementById('result-output-card').style.display = 'none';
@@ -1046,28 +851,18 @@ function buildResult() {
 function renderZoneTypeChips(zones) {
   if (!zones) zones = state.zones;
   const el = document.getElementById('result-zone-assign');
-  if (!zones.length) {
-    el.innerHTML = '<div class="empty">청소 구역을 먼저 설정해주세요</div>';
-    return;
-  }
+  if (!zones.length) { el.innerHTML = '<div class="empty">청소 구역을 먼저 설정해주세요</div>'; return; }
   el.innerHTML = zones.map((z, i) => {
     const isDuty = state.dutyZones.includes(i);
-    return `<span class="chip ${isDuty ? 'chip-duty' : 'chip-late'}"
-      style="cursor:pointer;padding:7px 14px;font-size:13px;min-width:220px;justify-content:flex-start;white-space:nowrap"
-      onclick="toggleDutyZone(${i})" title="클릭하여 유형 전환">
-      <span style="display:inline-block;width:80px;flex-shrink:0">${isDuty ? '🟢 당번 담당' : '🔴 지각생 담당'}</span> — ${z.name} (${z.count}명)
+    return `<span class="chip ${isDuty ? 'chip-duty' : 'chip-late'}" style="cursor:pointer;padding:7px 14px;font-size:13px;white-space:nowrap;justify-content:flex-start;width:280px;max-width:100%;box-sizing:border-box;" onclick="toggleDutyZone(${i})">
+      <span style="display:inline-block;width:90px;flex-shrink:0;">${isDuty ? '🟢 당번 담당' : '🔴 지각생 담당'}</span> — ${z.name} (${z.count}명)
     </span>`;
   }).join('');
 }
-
 function toggleDutyZone(i) {
   const pos = state.dutyZones.indexOf(i);
-  if (pos >= 0) state.dutyZones.splice(pos, 1);
-  else state.dutyZones.push(i);
-  saveState();
-  renderZoneTypeChips();
-  document.getElementById('result-output-card').style.display = 'none';
-  document.getElementById('result-actions').style.display = 'none';
+  if (pos >= 0) state.dutyZones.splice(pos, 1); else state.dutyZones.push(i);
+  saveState(); renderZoneTypeChips();
 }
 
 function shuffle(arr) {
@@ -1079,39 +874,19 @@ function shuffle(arr) {
   return a;
 }
 
-// 뷰 전환 버튼 동작
-function switchResultView(mode) {
-  state.resultViewMode = mode;
-  document.getElementById('btn-view-zone').classList.toggle('active', mode === 'zone');
-  document.getElementById('btn-view-student').classList.toggle('active', mode === 'student');
-  
-  if (state.lastAssignments) {
-    renderResultData(); // 캐시된 데이터로 다시 그리기
-  }
-}
-
 function distributeNow() {
   const lateIdxs = state.lateStudents.slice();
   const dutyIdxs = (state.duty[state.todayDay] || []).slice();
   const zones = state.zones;
 
   if (!zones.length) {
-    document.getElementById('result-table-wrap').innerHTML =
-      '<div class="empty">청소 구역을 먼저 설정해주세요</div>';
+    document.getElementById('result-table-wrap').innerHTML = '<div class="empty">청소 구역을 먼저 설정해주세요</div>';
     document.getElementById('result-output-card').style.display = 'block';
     return;
   }
 
-  const latePool = shuffle(
-    lateIdxs
-      .filter(i => !state.excludedInResult.includes(i))
-      .map(i => ({ idx: i, type: 'late' }))
-  );
-  const dutyPool = shuffle(
-    dutyIdxs
-      .filter(i => !state.excludedInResult.includes(i))
-      .map(i => ({ idx: i, type: 'duty' }))
-  );
+  const latePool = shuffle(lateIdxs.filter(i => !state.excludedInResult.includes(i)).map(i => ({ idx: i, type: 'late' })));
+  const dutyPool = shuffle(dutyIdxs.filter(i => !state.excludedInResult.includes(i)).map(i => ({ idx: i, type: 'duty' })));
 
   let lateQ = latePool.slice();
   let dutyQ = dutyPool.slice();
@@ -1121,207 +896,345 @@ function distributeNow() {
     const persons = [];
     for (let n = 0; n < z.count; n++) {
       if (isDutyZone) {
-        if (dutyQ.length) persons.push(dutyQ.shift());
-        else if (lateQ.length) persons.push(lateQ.shift());
+        if (dutyQ.length) persons.push(dutyQ.shift()); else if (lateQ.length) persons.push(lateQ.shift());
       } else {
-        if (lateQ.length) persons.push(lateQ.shift());
-        else if (dutyQ.length) persons.push(dutyQ.shift());
+        if (lateQ.length) persons.push(lateQ.shift()); else if (dutyQ.length) persons.push(dutyQ.shift());
       }
     }
     return { zone: z, zoneIdx: i, persons };
   });
 
-  const assignedIdxs = new Set(
-    assignments.flatMap(a => a.persons.map(p => p.idx))
-  );
-
-  const allCandidates = [...new Set([...lateIdxs, ...dutyIdxs])].filter(i => !state.excludedInResult.includes(i));
+  const assignedIdxs = new Set(assignments.flatMap(a => a.persons.map(p => p.idx)));
+  
+  // 청소 당번 + 지각생 명단 안에서만 후보/귀가를 계산합니다. 
+  // 일반 학생(역할이 전혀 없는 학생)은 결과 화면에서 제외합니다.
+  const allCandidates = [...new Set([...lateIdxs, ...dutyIdxs])];
   const goHomeAll = allCandidates.filter(i => !assignedIdxs.has(i));
 
-  // 렌더링에 필요한 결과 캐싱
   state.lastAssignments = assignments;
   state.lastGoHomeAll = goHomeAll;
   state.lastAllCandidates = allCandidates;
 
-  // 화면 렌더링 호출
   renderResultData();
 
   document.getElementById('result-output-card').style.display = 'block';
   const actEl = document.getElementById('result-actions');
   actEl.style.display = 'flex';
-  actEl.style.justifyContent = 'flex-end';
-  actEl.style.gap = '10px';
-  actEl.style.marginTop = '8px';
-
-  showToast('배분 완료! 🎲');
+  
+  // 배분 완료 시 캘린더에 자동 저장
+  saveToCalendar(true); 
 }
 
-// 모드에 따라 테이블을 다르게 그려주는 함수
+function switchResultView(mode) {
+  state.resultViewMode = mode;
+  document.getElementById('btn-view-zone').classList.toggle('active', mode === 'zone');
+  document.getElementById('btn-view-student').classList.toggle('active', mode === 'student');
+  if (state.lastAssignments) renderResultData();
+}
+
 function renderResultData() {
   const wrap = document.getElementById('result-table-wrap');
-  let html = '';
+  wrap.innerHTML = generateResultHTML(state.resultViewMode, state.lastAssignments, state.lastGoHomeAll, state.lastAllCandidates, state.lateStudents, state.duty[state.todayDay] || [], state.dutyZones, state.studentNames);
 
-  const lateIdxs = state.lateStudents;
-  const dutyIdxs = state.duty[state.todayDay] || [];
-
-  // 공통 적용: 뷰 모드에 상관없이 항상 상단에 '귀가 학생' 블록을 띄움
-  if (state.lastGoHomeAll.length) {
-    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;">
-      <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px">🏠 귀가 학생 <span style="font-size:11px;font-weight:400;color:var(--text2)">(청소 배정 없음)</span></div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        ${state.lastGoHomeAll.map(i => {
-          const isLate = lateIdxs.includes(i);
-          const isDuty = dutyIdxs.includes(i);
-          const tag = isLate && isDuty ? '지각+당번' : isLate ? '지각' : '당번';
-          const cls = isLate ? 'chip-late' : 'chip-duty';
-          return `<span class="result-chip ${cls} clickable" style="opacity:0.75" onclick="excludePerson(${i})" title="클릭하여 청소 제외">${getStudentLabel(i)} <span style="font-size:11px;opacity:0.8;margin-left:4px">(${tag})</span></span>`;
-        }).join('')}
-      </div>
-    </div>`;
-  }
-
-  if (state.resultViewMode === 'zone') {
-    // ===================================
-    // 1. 구역별 뷰 렌더링
-    // ===================================
-    html += `<table class="result-table">
-      <thead><tr>
-        <th style="width:150px">청소 구역</th>
-        <th style="width:100px">담당 유형</th>
-        <th>담당 인원</th>
-      </tr></thead><tbody>`;
-
-    state.lastAssignments.forEach(({ zone, zoneIdx, persons }) => {
-      const isDutyZone = state.dutyZones.includes(zoneIdx);
-      const typeBadge = isDutyZone
-        ? '<span class="status-badge badge-ok">🟢 당번</span>'
-        : '<span class="status-badge badge-warn">🔴 지각</span>';
-
-      const personsHtml = persons.length
-        ? persons.map(p => {
-            const cls = p.type === 'late' ? 'chip-late' : 'chip-duty';
-            return `<span class="result-chip ${cls} clickable" title="클릭하여 청소 제외" onclick="excludePerson(${p.idx})">${getStudentLabel(p.idx)}</span>`;
-          }).join('')
-        : '<span style="color:var(--text3);font-size:12px">배정 인원 없음</span>';
-
-      html += `<tr>
-        <td><div class="result-zone-name">${zone.name}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${zone.count}명</div></td>
-        <td>${typeBadge}</td>
-        <td><div class="result-persons">${personsHtml}</div></td>
-      </tr>`;
-    });
-
-    html += '</tbody></table>';
-
-  } else {
-    // ===================================
-    // 2. 학생 번호순 뷰 렌더링
-    // ===================================
-    html += `<table class="result-table">
-      <thead><tr>
-        <th style="width:150px">청소 대상자</th>
-        <th style="width:140px">역할</th>
-        <th>배정 구역 결과</th>
-      </tr></thead><tbody>`;
-
-    // 대상자들을 번호(인덱스) 오름차순으로 정렬
-    const sortedCandidates = state.lastAllCandidates.slice().sort((a, b) => a - b);
-    
-    if (sortedCandidates.length === 0) {
-      html += `<tr><td colspan="3"><div class="empty" style="padding: 24px 0;">배정 대상 학생이 없습니다.</div></td></tr>`;
-    }
-
-    sortedCandidates.forEach(i => {
-      let isHome = state.lastGoHomeAll.includes(i);
-      let studentAssignments = []; // 이 학생이 배정받은 모든 역할과 구역 저장 (지각생이면서 당번인 경우 최대 2개)
-
-      if (!isHome) {
-        for (const a of state.lastAssignments) {
-          const pList = a.persons.filter(x => x.idx === i);
-          pList.forEach(p => {
-             studentAssignments.push({ zone: a.zone.name, type: p.type });
-          });
-        }
-      }
-
-      let roleBadge = '';
-      let zoneText = '';
-      let chipCls = '';
-
-      if (isHome) {
-        const isLate = lateIdxs.includes(i);
-        const isDuty = dutyIdxs.includes(i);
-        const tag = isLate && isDuty ? '지각+당번' : isLate ? '지각' : '당번';
-        roleBadge = `<span class="status-badge" style="background:var(--surface2);color:var(--text2)">🏠 귀가 (${tag})</span>`;
-        zoneText = '<div style="color:var(--text3);font-size:13px">배정 없음 (귀가)</div>';
-        chipCls = 'chip-excluded';
-      } else {
-        // 배정받은 내역이 2개일 경우 모두 표시되도록 맵핑 처리
-        roleBadge = `<div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">` + 
-          studentAssignments.map(a => 
-            a.type === 'duty' ? '<span class="status-badge badge-ok">🟢 당번</span>' : '<span class="status-badge badge-warn">🔴 지각</span>'
-          ).join('') + `</div>`;
-
-        zoneText = `<div style="display:flex; flex-direction:column; gap:6px; justify-content:center;">` + 
-          studentAssignments.map(a => 
-            `<div class="result-zone-name" style="color:var(--accent); font-size:14px; line-height:22px;">${a.zone}</div>`
-          ).join('') + `</div>`;
-        
-        // 지각과 당번을 둘 다 하는 학생이라면 칩 색상을 혼합형태(파란색 느낌)로 표시
-        const hasLate = studentAssignments.some(a => a.type === 'late');
-        const hasDuty = studentAssignments.some(a => a.type === 'duty');
-        chipCls = (hasLate && hasDuty) ? 'chip-zone' : (hasLate ? 'chip-late' : 'chip-duty');
-      }
-
-      const studentChip = `<span class="result-chip ${chipCls} clickable" onclick="excludePerson(${i})" title="클릭하여 청소 제외" style="${isHome ? 'opacity:0.75; text-decoration:none;' : ''}">${getStudentLabel(i)}</span>`;
-
-      html += `<tr>
-        <td>${studentChip}</td>
-        <td>${roleBadge}</td>
-        <td>${zoneText}</td>
-      </tr>`;
-    });
-    html += '</tbody></table>';
-  }
-
-  wrap.innerHTML = html;
-
-  // 제외 인원 UI 처리
   const excEl = document.getElementById('excluded-row');
   if (state.excludedInResult.length) {
     const excNames = state.excludedInResult.map(i => getStudentLabel(i)).join(', ');
-    excEl.innerHTML = `제외된 인원: ${excNames} &nbsp;—&nbsp; <button class="btn btn-sm" onclick="restoreAll()">전체 복구</button>`;
+    excEl.innerHTML = `청소 제외(수동 결석처리 등): ${excNames} &nbsp;—&nbsp; <button class=\"btn btn-sm\" onclick=\"restoreAll()\">전체 복구</button>`;
     excEl.style.display = 'block';
   } else {
     excEl.style.display = 'none';
   }
 }
 
-// 클릭하여 청소 제외하기
+// 추출된 공통 HTML 생성 함수 (현재 뷰, 모달 뷰 모두 사용)
+function generateResultHTML(mode, assignments, goHomeAll, allCandidates, lateIdxs, dutyIdxs, dutyZones, namesArr) {
+  let html = '';
+  const getLbl = (i) => getStudentLabel(i, namesArr);
+
+  if (goHomeAll.length) {
+    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;">
+      <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px">🏠 귀가 학생 (총 ${goHomeAll.length}명) <span style="font-size:11px;font-weight:400;color:var(--text2)">(청소 배정에서 제외된 대상자)</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${goHomeAll.map(i => {
+          const isLate = lateIdxs.includes(i);
+          const isDuty = dutyIdxs.includes(i);
+          const isExc = state.excludedInResult.includes(i);
+          
+          let tag = (isLate && isDuty) ? '지각+당번' : (isLate ? '지각' : '당번');
+          let cls = isLate ? 'chip-late' : 'chip-duty';
+          if (isLate && isDuty) cls = 'chip-zone';
+          
+          let styleStr = isExc ? 'opacity:0.5; text-decoration:line-through;' : 'opacity:0.9;';
+          const tagHtml = `<span style="font-size:10px;opacity:0.8;margin-left:4px">(${tag})</span>`;
+          
+          return `<span class="result-chip ${cls} clickable" style="${styleStr}" onclick="excludePerson(${i})" title="클릭하여 수동 제외">${getLbl(i)}${tagHtml}</span>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (mode === 'zone') {
+    html += `<table class="result-table"><thead><tr><th style="width:150px">청소 구역</th><th style="width:100px">담당 유형</th><th>담당 인원</th></tr></thead><tbody>`;
+    assignments.forEach(({ zone, zoneIdx, persons }) => {
+      const isDutyZone = dutyZones.includes(zoneIdx);
+      const typeBadge = isDutyZone ? '<span class="status-badge badge-ok">🟢 당번</span>' : '<span class="status-badge badge-warn">🔴 지각</span>';
+      const personsHtml = persons.length
+        ? persons.map(p => `<span class="result-chip ${p.type==='late'?'chip-late':'chip-duty'} clickable" onclick="excludePerson(${p.idx})">${getLbl(p.idx)}</span>`).join('')
+        : '<span style="color:var(--text3);font-size:12px">배정 인원 없음</span>';
+      html += `<tr><td><div class="result-zone-name">${zone.name}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${zone.count}명</div></td><td>${typeBadge}</td><td><div class="result-persons">${personsHtml}</div></td></tr>`;
+    });
+    html += '</tbody></table>';
+  } else {
+    html += `<table class="result-table"><thead><tr><th style="width:150px">청소 대상자</th><th style="width:160px">역할</th><th>배정 구역 결과</th></tr></thead><tbody>`;
+    const sortedCandidates = allCandidates.slice().sort((a, b) => a - b);
+    if (sortedCandidates.length === 0) html += `<tr><td colspan=\"3\"><div class=\"empty\" style=\"padding: 24px 0;\">오늘 배정 대상(당번/지각생) 학생이 없습니다.</div></td></tr>`;
+
+    sortedCandidates.forEach(i => {
+      let isHome = goHomeAll.includes(i);
+      let studentAssignments = [];
+      if (!isHome) {
+        assignments.forEach(a => {
+          a.persons.filter(x => x.idx === i).forEach(p => studentAssignments.push({ zone: a.zone.name, type: p.type }));
+        });
+      }
+      
+      let roleBadge = '', zoneText = '', chipCls = '', studentChip = '';
+      const isLate = lateIdxs.includes(i);
+      const isDuty = dutyIdxs.includes(i);
+      const isExc = state.excludedInResult.includes(i);
+
+      if (isHome) {
+        const tag = (isLate && isDuty) ? '지각+당번' : (isLate ? '지각' : '당번');
+        roleBadge = `<span class="status-badge" style="background:var(--surface2);color:var(--text2)">🏠 귀가 (${tag})</span>`;
+        zoneText = '<div style="color:var(--text3);font-size:13px">배정 없음 (귀가)</div>';
+        
+        chipCls = isLate ? 'chip-late' : 'chip-duty';
+        if (isLate && isDuty) chipCls = 'chip-zone';
+        if (isExc) chipCls = 'chip-excluded';
+
+        let chipStyle = isExc ? 'opacity:0.6;' : 'opacity:0.8;';
+        studentChip = `<span class="result-chip ${chipCls}" style="${chipStyle}">${getLbl(i)}</span>`;
+      } else {
+        roleBadge = `<div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">` + 
+          studentAssignments.map(a => a.type === 'duty' ? '<span class="status-badge badge-ok">🟢 당번</span>' : '<span class="status-badge badge-warn">🔴 지각</span>').join('') + `</div>`;
+        zoneText = `<div style="display:flex; flex-direction:column; gap:6px; justify-content:center;">` + 
+          studentAssignments.map(a => `<div class="result-zone-name" style="color:var(--accent); font-size:14px; line-height:22px;">${a.zone}</div>`).join('') + `</div>`;
+        
+        chipCls = (isLate && isDuty) ? 'chip-zone' : (isLate ? 'chip-late' : 'chip-duty');
+        studentChip = `<span class="result-chip ${chipCls} clickable" onclick="excludePerson(${i})" title="클릭하여 수동 제외">${getLbl(i)}</span>`;
+      }
+      html += `<tr><td>${studentChip}</td><td>${roleBadge}</td><td>${zoneText}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  }
+  return html;
+}
+
 function excludePerson(idx) {
   if (!state.excludedInResult.includes(idx)) {
-    state.excludedInResult.push(idx);
-    saveState();
-    distributeNow();
+    state.excludedInResult.push(idx); saveState(); distributeNow();
     showToast(getStudentLabel(idx) + ' 제외됨');
   }
 }
-
 function restoreAll() {
-  state.excludedInResult = [];
-  saveState();
-  distributeNow();
+  state.excludedInResult = []; saveState(); distributeNow();
   showToast('전체 복구됨');
 }
 
-// ===================== ENTRY =====================
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    renderZones();
-    renderDutyPage();
-    renderTodayPage();
+// ===================== CALENDAR / HISTORY =====================
+function saveToCalendar(isAuto = false) {
+  if (!state.lastAssignments) return;
+  const now = new Date();
+  const dateStr = getLocalDateString(now); // 한국/로컬 시간대 기준 오늘의 날짜 문자열
+  const timeStr = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+  if (!state.history) state.history = {};
+  if (!state.history[dateStr]) state.history[dateStr] = [];
+
+  state.history[dateStr].push({
+    id: Date.now(),
+    time: timeStr,
+    dayName: state.todayDay,
+    assignments: JSON.parse(JSON.stringify(state.lastAssignments)),
+    goHomeAll: [...state.lastGoHomeAll],
+    allCandidates: [...state.lastAllCandidates],
+    lateStudents: [...state.lateStudents],
+    duty: [...(state.duty[state.todayDay] || [])],
+    dutyZones: [...state.dutyZones],
+    studentNames: [...state.studentNames]
   });
-});
+  saveState();
+  if (isAuto) {
+    showToast('배분 완료 및 캘린더에 자동 저장되었습니다! 🎲');
+  } else {
+    showToast('캘린더에 저장되었습니다!');
+  }
+  renderCalendar();
+}
+
+function changeMonth(diff) {
+  calCurrentDate.setMonth(calCurrentDate.getMonth() + diff);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const y = calCurrentDate.getFullYear();
+  const m = calCurrentDate.getMonth();
+  document.getElementById('cal-month-title').textContent = `${y}년 ${m + 1}월`;
+
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  const prevDays = new Date(y, m, 0).getDate();
+
+  let html = '';
+  
+  // Prev month filler
+  for (let i = firstDay - 1; i >= 0; i--) {
+    html += `<div class="cal-day other-month">${prevDays - i}</div>`;
+  }
+  // Current month (로컬 시간 기준 오늘의 날짜)
+  const todayStr = getLocalDateString(new Date());
+  
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+    const isToday = dStr === todayStr;
+    const isSelected = dStr === calSelectedDateStr;
+    const hasRecord = state.history && state.history[dStr] && state.history[dStr].length > 0;
+    
+    html += `<div class="cal-day ${isToday ? 'today' : ''} ${isSelected ? 'active' : ''}" onclick="selectDate('${dStr}')">
+      ${i}
+      ${hasRecord ? '<div class="cal-dot"></div>' : ''}
+    </div>`;
+  }
+  // Next month filler
+  const totalCells = firstDay + daysInMonth;
+  let nextDay = 1;
+  for (let i = totalCells; i < Math.ceil(totalCells/7)*7; i++) {
+    html += `<div class="cal-day other-month">${nextDay++}</div>`;
+  }
+
+  document.getElementById('cal-grid').innerHTML = html;
+  
+  if (calSelectedDateStr) renderHistoryList(calSelectedDateStr);
+}
+
+function selectDate(dateStr) {
+  calSelectedDateStr = dateStr;
+  renderCalendar(); // refresh active state
+}
+
+function renderHistoryList(dateStr) {
+  const records = (state.history && state.history[dateStr]) || [];
+  const card = document.getElementById('cal-records-card');
+  const title = document.getElementById('cal-records-title');
+  const list = document.getElementById('cal-records-list');
+
+  card.style.display = 'block';
+  title.innerHTML = `<span class="card-title-icon">📜</span> ${dateStr} 기록`;
+
+  if (records.length === 0) {
+    list.innerHTML = '<div class="empty">저장된 기록이 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = records.map((rec, i) => `
+    <div class="swipe-container">
+      <div class="swipe-actions">
+        <div style="flex:1"></div>
+        <button class="swipe-del-btn" onclick="deleteRecord('${dateStr}', ${rec.id})">삭제</button>
+      </div>
+      <div class="swipe-content" onclick="openHistoryDetail('${dateStr}', ${i})" title="클릭하여 상세 보기">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-weight:700; color:var(--accent)">${rec.time}</div>
+          <div style="font-size:13px; color:var(--text2)">${rec.dayName}요일 배분 · 대상 ${rec.allCandidates.length}명</div>
+        </div>
+        <div style="font-size:16px; opacity:0.5">〉</div>
+      </div>
+    </div>
+  `).join('');
+
+  attachSwipeEvents();
+}
+
+function deleteRecord(dateStr, id) {
+  state.history[dateStr] = state.history[dateStr].filter(r => r.id !== id);
+  saveState();
+  renderHistoryList(dateStr);
+  renderCalendar(); // To remove dot if empty
+  showToast('기록이 삭제되었습니다.');
+}
+
+function attachSwipeEvents() {
+  document.querySelectorAll('.swipe-content').forEach(el => {
+    let startX = 0, currentX = 0, isDragging = false;
+    
+    const onStart = (e) => {
+      if (e.target.closest('button')) return; // Ignore buttons
+      startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+      isDragging = true;
+      el.style.transition = 'none';
+    };
+    const onMove = (e) => {
+      if (!isDragging) return;
+      const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+      const delta = x - startX;
+      if (Math.abs(delta) > 10) e.preventDefault(); // Stop vertical scroll if swiping
+      if (delta < 0) {
+        currentX = Math.max(delta, -80);
+        el.style.transform = `translateX(${currentX}px)`;
+      } else {
+        currentX = 0; el.style.transform = `translateX(0px)`;
+      }
+    };
+    const onEnd = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      el.style.transition = 'transform 0.2s';
+      if (currentX < -40) {
+        el.style.transform = `translateX(-80px)`;
+      } else {
+        el.style.transform = `translateX(0px)`;
+      }
+    };
+
+    el.addEventListener('mousedown', onStart);
+    el.addEventListener('touchstart', onStart, {passive: true});
+    window.addEventListener('mousemove', onMove, {passive: false});
+    window.addEventListener('touchmove', onMove, {passive: false});
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+  });
+}
+
+function openHistoryDetail(dateStr, idx) {
+  const el = event.currentTarget;
+  if (el && el.style.transform && el.style.transform !== 'translateX(0px)') {
+    el.style.transform = 'translateX(0px)'; 
+    return;
+  }
+
+  const rec = state.history[dateStr][idx];
+  document.getElementById('history-modal-title').textContent = `${dateStr} ${rec.time} 배분 결과`;
+  
+  const contentHtml = generateResultHTML('student', rec.assignments, rec.goHomeAll, rec.allCandidates, rec.lateStudents, rec.duty, rec.dutyZones, rec.studentNames);
+  const safeHtml = contentHtml.replace(/clickable" onclick="[^"]+"/g, '"');
+  
+  document.getElementById('history-modal-content').innerHTML = safeHtml;
+  
+  // 모달창 내 삭제 버튼 추가
+  document.getElementById('history-modal-footer').innerHTML = `
+    <button class="btn btn-danger" onclick="deleteRecordFromModal('${dateStr}', ${rec.id})">이 기록 삭제</button>
+    <button class="btn btn-accent" onclick="closeModal()">닫기</button>
+  `;
+
+  document.getElementById('modal-overlay').style.display = 'block';
+  document.getElementById('history-modal').style.display = 'block';
+}
+
+function deleteRecordFromModal(dateStr, id) {
+  deleteRecord(dateStr, id);
+  closeModal();
+}
 </script>
 </body>
 </html>
