@@ -513,7 +513,7 @@ function changeYear() {
   showToast(`${currentYear}학년도 데이터를 불러왔습니다.`);
   
   // Try to load from cloud if connected
-  if (window.firebaseUser && window.firestoreDb) {
+  if (window.firestoreDb) {
     syncFromCloud();
   }
 }
@@ -589,13 +589,14 @@ function saveState() {
   localStorage.setItem(getStorageKey(), JSON.stringify(rest));
   localStorage.setItem('cleaning-app-last-year', currentYear);
 
-  // Cloud Sync
-  if (window.firebaseUser && window.firestoreDb && window.firestoreFns) {
+  // Cloud Sync (선생님 전용 Firebase 경로 적용)
+  if (window.firestoreDb && window.firestoreFns) {
     setCloudStatus('saving');
     clearTimeout(cloudSaveTimer);
     cloudSaveTimer = setTimeout(() => {
+      // 'cleaning_data' 컬렉션에 학년도별로 저장 (모든 기기 동기화용)
       window.firestoreFns.setDoc(
-        window.firestoreFns.doc(window.firestoreDb, 'artifacts', window.firebaseAppId, 'users', window.firebaseUser.uid, 'cleaningState', String(currentYear)),
+        window.firestoreFns.doc(window.firestoreDb, 'cleaning_data', 'year_' + currentYear),
         rest
       ).then(() => {
         setCloudStatus('synced');
@@ -1316,16 +1317,26 @@ function deleteRecordFromModal(dateStr, id) {
 }
 
 // ===================== FIREBASE SYNC LOGIC =====================
+// ⭐ 선생님의 Firebase 프로젝트 설정값을 아래에 붙여넣으세요! ⭐
+const firebaseConfig = {apiKey: "AIzaSyAtOSsm4Q4ZI9b0VWu3ValyfM2w74ToNn8",
+  authDomain: "cleaning-10917.firebaseapp.com",
+  projectId: "cleaning-10917",
+  storageBucket: "cleaning-10917.firebasestorage.app",
+  messagingSenderId: "45470101993",
+  appId: "1:45470101993:web:8c46eef721ca3c969f1b78",
+  measurementId: "G-T2C9EH2VX1"
+};
+
 window.firebaseUser = null;
 window.firestoreDb = null;
 window.firestoreFns = {};
-window.firebaseAppId = 'default-app-id';
 
 async function syncFromCloud() {
-  if (!window.firebaseUser || !window.firestoreDb || !window.firestoreFns) return;
+  if (!window.firestoreDb || !window.firestoreFns) return;
   setCloudStatus('loading');
   try {
-    const docRef = window.firestoreFns.doc(window.firestoreDb, 'artifacts', window.firebaseAppId, 'users', window.firebaseUser.uid, 'cleaningState', String(currentYear));
+    // 'cleaning_data' 컬렉션에서 데이터 불러오기
+    const docRef = window.firestoreFns.doc(window.firestoreDb, 'cleaning_data', 'year_' + currentYear);
     const docSnap = await window.firestoreFns.getDoc(docRef);
     
     if (docSnap.exists()) {
@@ -1357,28 +1368,25 @@ async function syncFromCloud() {
 
 async function initFirebase() {
   try {
-    // 캔버스 환경 변수에서 환경 설정 정보 불러오기
-    if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
-    const config = JSON.parse(__firebase_config);
-    if (typeof __app_id !== 'undefined') window.firebaseAppId = __app_id;
+    // 설정값이 입력되지 않았으면 실행 안 함
+    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("여기에")) {
+      console.warn("Firebase 설정이 입력되지 않았습니다. 로컬 모드로만 작동합니다.");
+      return;
+    }
 
     // Firebase 모듈 동적 임포트
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
-    const { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+    const { getAuth, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
     const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
 
     window.firestoreFns = { doc, setDoc, getDoc };
 
-    const app = initializeApp(config);
+    const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     window.firestoreDb = getFirestore(app);
 
-    // 로그인 토큰 인증 (토큰이 없으면 익명 로그인)
-    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-      await signInWithCustomToken(auth, __initial_auth_token);
-    } else {
-      await signInAnonymously(auth);
-    }
+    // 익명 로그인 (모든 기기에서 인증 통과를 위해)
+    await signInAnonymously(auth);
 
     // 인증 상태 감지 후 초기 동기화 진행
     onAuthStateChanged(auth, async (u) => {
