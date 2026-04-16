@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>청소 배분 시스템</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -59,29 +59,21 @@ body {
   top: 0;
   z-index: 100;
 }
-.header-title { font-size: 16px; font-weight: 700; letter-spacing: 0.03em; }
+.header-title { font-size: 16px; font-weight: 700; letter-spacing: 0.03em; display: flex; align-items: center; gap: 6px; }
 .header-sub { font-size: 11px; opacity: 0.6; font-family: 'DM Mono', monospace; margin-top: 1px; }
 .header-date { font-family: 'DM Mono', monospace; font-size: 12px; opacity: 0.75; }
 
 /* CLOUD STATUS */
-.cloud-status { display:flex; align-items:center; gap:4px; font-size:12px; color:rgba(255,255,255,0.8); background:rgba(0,0,0,0.2); padding:4px 8px; border-radius:4px; transition: all 0.2s; }
+.cloud-status { display:flex; align-items:center; gap:4px; font-size:12px; color:rgba(255,255,255,0.8); background:rgba(0,0,0,0.2); padding:4px 8px; border-radius:4px; transition: all 0.2s; white-space: nowrap; }
 .cloud-status.synced { color: #A5D6A7; }
 .cloud-status.saving { color: #FFF59D; }
 .cloud-status.error { color: #EF9A9A; }
 
 /* LAYOUT */
 .layout {
-  display: grid;
-  grid-template-columns: 220px 1fr;
+  display: flex;
+  flex-direction: row;
   min-height: calc(100vh - 56px);
-}
-@media (max-width: 768px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { height: auto; border-right: none; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); padding: 10px; gap: 4px; position: static; }
-  .nav-group-label { display: none; }
-  .nav-btn { justify-content: center; padding: 8px; font-size: 12px; }
-  .nav-divider { display: none; }
-  .main { padding: 16px; }
 }
 
 /* SIDEBAR */
@@ -96,6 +88,8 @@ body {
   top: 56px;
   height: calc(100vh - 56px);
   overflow-y: auto;
+  width: 220px;
+  flex-shrink: 0;
 }
 .nav-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text3); text-transform: uppercase; padding: 8px 12px 4px; }
 .nav-btn {
@@ -106,22 +100,22 @@ body {
 }
 .nav-btn:hover { background: var(--surface2); color: var(--text); }
 .nav-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
-.nav-icon { font-size: 16px; width: 20px; text-align: center; }
-.nav-divider { height: 1px; background: var(--border); margin: 8px 0; }
+.nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-divider { height: 1px; background: var(--border); margin: 8px 0; flex-shrink: 0; }
 
 /* MAIN */
-.main { padding: 28px 32px; max-width: 900px; width: 100%; margin: 0 auto; }
+.main { padding: 28px 32px; max-width: 900px; width: 100%; margin: 0 auto; flex: 1; min-width: 0; }
 .page { display: none; }
 .page.active { display: block; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
 .page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-.page-desc { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+.page-desc { font-size: 13px; color: var(--text2); margin-bottom: 24px; word-break: keep-all; }
 
 /* CARDS */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
 .card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; }
-.card-title-icon { font-size: 16px; }
+.card-title-icon { font-size: 16px; flex-shrink: 0; }
 
 /* FORM & BUTTONS */
 .form-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -129,11 +123,11 @@ body {
 input[type="text"], input[type="number"], select {
   padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
   background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px; outline: none; transition: border 0.15s;
+  font-size: 13px; outline: none; transition: border 0.15s; max-width: 100%;
 }
 input[type="text"]:focus, input[type="number"]:focus { border-color: var(--accent); }
 input[type="number"] { width: 80px; }
-input[type="text"] { flex: 1; min-width: 140px; }
+input[type="text"] { flex: 1; min-width: 120px; }
 .btn { padding: 7px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .btn:hover { background: var(--surface2); }
 .btn-accent { background: var(--accent); color: white; border-color: var(--accent); }
@@ -143,7 +137,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
 .btn-danger:hover { background: var(--danger-light); }
 
 /* TAGS / CHIPS */
-.chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; transition: all 0.2s; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; transition: all 0.2s; word-break: keep-all; }
 .chip-late { background: var(--late-bg); border: 1px solid var(--late-border); color: var(--late-text); }
 .chip-duty { background: var(--duty-bg); border: 1px solid var(--duty-border); color: var(--duty-text); }
 .chip-zone { background: #E8EFFE; border: 1px solid #7E99DC; color: #1A3070; }
@@ -169,15 +163,14 @@ input[type="text"] { flex: 1; min-width: 140px; }
 .toggle-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
 /* RESULT TABLE */
-.result-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-.result-table th { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; color: var(--text2); text-transform: uppercase; padding: 6px 10px; text-align: left; border-bottom: 2px solid var(--border); }
+.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-sm); }
+.result-table { width: 100%; border-collapse: collapse; margin-top: 12px; min-width: 400px; }
+.result-table th { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; color: var(--text2); text-transform: uppercase; padding: 6px 10px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
 .result-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .result-table tr:last-child td { border-bottom: none; }
-.result-zone-name { font-size: 14px; font-weight: 700; color: var(--text); min-width: 120px; }
+.result-zone-name { font-size: 14px; font-weight: 700; color: var(--text); min-width: 100px; }
 .result-persons { display: flex; flex-wrap: wrap; gap: 6px; }
 .result-chip { padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; }
-.result-chip.clickable { cursor: pointer; transition: all 0.12s; }
-.result-chip.clickable:hover { opacity: 0.75; text-decoration: line-through; }
 
 /* STATUS BADGE */
 .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-family: 'DM Mono', monospace; white-space: nowrap; }
@@ -186,10 +179,10 @@ input[type="text"] { flex: 1; min-width: 140px; }
 .badge-over { background: #FDECEA; color: var(--danger); }
 
 /* INFO BOX & STATS */
-.info-box { background: var(--duty-bg); border: 1px solid var(--duty-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--duty-text); margin-bottom: 14px; }
-.warn-box { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--warn-text); margin-bottom: 14px; }
-.stat-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 16px; min-width: 110px; flex: 1; }
+.info-box { background: var(--duty-bg); border: 1px solid var(--duty-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--duty-text); margin-bottom: 14px; word-break: keep-all; }
+.warn-box { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--warn-text); margin-bottom: 14px; word-break: keep-all; }
+.stat-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; min-width: 100px; flex: 1; }
 .stat-label { font-size: 11px; color: var(--text2); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .stat-val { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--text); margin-top: 2px; }
 .stat-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
@@ -208,30 +201,64 @@ input[type="text"] { flex: 1; min-width: 140px; }
 .cal-dot { width: 6px; height: 6px; background: var(--danger); border-radius: 50%; position: absolute; bottom: 6px; }
 
 /* SWIPE TO DELETE */
-.swipe-container { position: relative; overflow: hidden; border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); }
-.swipe-content { background: var(--surface); padding: 12px 16px; position: relative; z-index: 2; transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.swipe-container { position: relative; overflow: hidden; border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); touch-action: pan-y; }
+.swipe-content { background: var(--surface); padding: 12px 16px; position: relative; z-index: 2; transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1); display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
 .swipe-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; z-index: 1; }
 .swipe-del-btn { background: var(--danger); color: white; border: none; padding: 0 20px; font-weight: bold; cursor: pointer; width: 80px; text-align: center; }
 
 /* MODALS */
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 900; backdrop-filter: blur(2px); }
-.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); padding: 24px; border-radius: var(--radius); z-index: 1000; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 900; }
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); padding: 24px; border-radius: var(--radius); z-index: 1000; width: 90%; max-width: 400px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 .modal h3 { margin-bottom: 12px; font-size: 18px; color: var(--text); }
-.modal-large { min-width: 80vw; max-width: 900px; max-height: 85vh; overflow-y: auto; }
+.modal-large { max-width: 900px; max-height: 85vh; overflow-y: auto; }
 
 /* OTHERS */
-.empty { font-size: 13px; color: var(--text3); padding: 12px 0; text-align: center; }
+.empty { font-size: 13px; color: var(--text3); padding: 12px 0; text-align: center; width: 100%; }
 .sep { height: 1px; background: var(--border); margin: 14px 0; }
 .zone-list { margin-top: 10px; }
-.zone-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.zone-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
 .zone-row:last-child { border-bottom: none; }
-.zone-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); display:flex; align-items:center; gap:6px; }
-.zone-count-label { font-size: 12px; color: var(--text2); }
+.zone-name { flex: 1; min-width: 100px; font-size: 13px; font-weight: 500; color: var(--text); display:flex; align-items:center; gap:6px; word-break: break-all; }
+.zone-count-label { font-size: 12px; color: var(--text2); white-space: nowrap; }
 .zone-count-input { width: 60px; }
 
 /* TOAST */
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: white; padding: 10px 20px; border-radius: var(--radius); font-size: 13px; opacity: 0; transform: translateY(8px); transition: all 0.25s; pointer-events: none; z-index: 9999; }
+.toast { position: fixed; bottom: 24px; right: 24px; left: 24px; text-align: center; background: var(--accent); color: white; padding: 12px 20px; border-radius: var(--radius); font-size: 13px; opacity: 0; transform: translateY(8px); transition: all 0.25s; pointer-events: none; z-index: 9999; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 .toast.show { opacity: 1; transform: translateY(0); }
+
+/* MOBILE RESPONSIVE CSS */
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  .sidebar {
+    flex-direction: row; 
+    width: 100%; height: auto; 
+    border-right: none; border-bottom: 1px solid var(--border);
+    padding: 10px 16px; gap: 10px;
+    position: sticky; top: 56px; z-index: 90;
+    overflow-x: auto; white-space: nowrap;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .nav-group-label, .nav-divider { display: none; }
+  .nav-btn { flex: 0 0 auto; width: auto; padding: 8px 16px; font-size: 13px; justify-content: center; border: 1px solid transparent; }
+  .nav-btn.active { border-color: var(--accent-light); }
+  .main { padding: 16px; }
+  .card { padding: 16px; margin-bottom: 12px; }
+  .form-label { min-width: 70px; }
+  .stat-card { min-width: 45%; padding: 10px; }
+  .page-title { font-size: 20px; }
+  
+  /* Make sure chips don't overflow on small screens */
+  .chip { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 0 16px; }
+  .header-sub { display: none; }
+  #cloud-text { display: none; } /* Hide text, show only icon to save space */
+  .cloud-status { padding: 4px 6px; }
+  .stat-card { min-width: 40%; }
+}
 </style>
 </head>
 <body>
@@ -241,7 +268,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
     <div class="header-title">🧹 청소 배분 시스템</div>
     <div class="header-sub">고등학교 담임 전용</div>
   </div>
-  <div style="display:flex; align-items:center; gap: 12px;">
+  <div style="display:flex; align-items:center; gap: 10px;">
     <!-- Cloud Status -->
     <div id="cloud-status" class="cloud-status">
       <span id="cloud-icon">💻</span>
@@ -249,16 +276,15 @@ input[type="text"] { flex: 1; min-width: 140px; }
     </div>
 
     <!-- 학년도 수동 입력 폼 -->
-    <div style="display:flex; align-items:center; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:6px; padding:4px 10px;">
-      <input type="text" inputmode="numeric" pattern="[0-9]*" id="year-input" onchange="changeYear()" onkeyup="if(event.key==='Enter') this.blur()" style="background:transparent; color:white; border:none; width:45px; font-weight:700; font-family:inherit; font-size:14px; outline:none; text-align:right; padding:0;">
+    <div style="display:flex; align-items:center; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:6px; padding:4px 8px;">
+      <input type="text" inputmode="numeric" pattern="[0-9]*" id="year-input" onchange="changeYear()" onkeyup="if(event.key==='Enter') this.blur()" style="background:transparent; color:white; border:none; width:40px; font-weight:700; font-family:inherit; font-size:14px; outline:none; text-align:right; padding:0;">
       <span style="color:rgba(255,255,255,0.9); font-size:13px; margin-left:4px; font-weight:500;">학년도</span>
     </div>
-    <div class="header-date" id="today-date"></div>
   </div>
 </header>
 
 <div class="layout">
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR (Mobile Top Tabs) -->
   <nav class="sidebar">
     <div class="nav-group-label">설정</div>
     <button class="nav-btn active" onclick="showPage('setup', this)"><span class="nav-icon">⚙️</span> 기본 설정</button>
@@ -268,7 +294,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
     <div class="nav-group-label">오늘</div>
     <button class="nav-btn" onclick="showPage('result', this)"><span class="nav-icon">✅</span> 청소 배분</button>
     <div class="nav-divider"></div>
-    <button class="nav-btn" onclick="showPage('calendar', this); renderCalendar();"><span class="nav-icon">📅</span> 캘린더 (기록)</button>
+    <button class="nav-btn" onclick="showPage('calendar', this); renderCalendar();"><span class="nav-icon">📅</span> 캘린더 기록</button>
   </nav>
 
   <!-- MAIN -->
@@ -297,12 +323,12 @@ input[type="text"] { flex: 1; min-width: 140px; }
       <div class="card">
         <div class="card-title"><span class="card-title-icon">📝</span> 학생 명단</div>
         <div class="form-row">
-          <input type="text" id="student-name-input" placeholder="이름을 띄어쓰기나 쉼표로 구분하여 여러 명을 한 번에 붙여넣을 수 있습니다." onkeydown="if(event.key==='Enter')addStudentName()">
+          <input type="text" id="student-name-input" placeholder="띄어쓰기나 쉼표로 여러 명 한 번에 추가 가능" onkeydown="if(event.key==='Enter')addStudentName()">
           <button class="btn btn-accent" onclick="addStudentName()">추가</button>
           <button class="btn btn-danger btn-sm" onclick="clearStudentNames()">전체 초기화</button>
         </div>
         <div id="student-names-list" class="chip-grid"></div>
-        <div style="margin-top:12px;font-size:12px;color:var(--text3)">이름을 입력하지 않아도 번호(1번~N번)로 자동 사용됩니다.</div>
+        <div style="margin-top:12px;font-size:12px;color:var(--text3)">이름을 미입력하면 번호(1번~N번)가 자동 사용됩니다.</div>
       </div>
     </div>
 
@@ -377,17 +403,15 @@ input[type="text"] { flex: 1; min-width: 140px; }
 
       <!-- STEP 2: 배분 버튼 -->
       <div style="display:flex;gap:10px;justify-content:center;margin-bottom:20px">
-        <button class="btn btn-accent" id="distribute-btn" onclick="distributeNow()" style="padding:12px 40px;font-size:15px;font-weight:700;border-radius:8px">
+        <button class="btn btn-accent" id="distribute-btn" onclick="distributeNow()" style="padding:12px 40px;font-size:15px;font-weight:700;border-radius:8px; width: 100%; max-width: 300px;">
           🎲 배분! (자동 저장)
         </button>
       </div>
 
       <!-- STEP 3: 결과 -->
       <div class="card" id="result-output-card" style="display:none">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
-          <div>
-            <div class="card-title" style="margin-bottom:4px;"><span class="card-title-icon">✅</span> 청소 구역별 배분 결과</div>
-          </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+          <div class="card-title" style="margin-bottom:0;"><span class="card-title-icon">✅</span> 배분 결과</div>
           <div class="toggle-group" id="result-view-toggle">
             <button class="toggle-btn" id="btn-view-zone" onclick="switchResultView('zone')">🗂️ 구역별</button>
             <button class="toggle-btn active" id="btn-view-student" onclick="switchResultView('student')">🔢 번호순</button>
@@ -405,7 +429,7 @@ input[type="text"] { flex: 1; min-width: 140px; }
     <!-- ===== 캘린더 (기록) ===== -->
     <div id="page-calendar" class="page">
       <div class="page-title">캘린더 (기록)</div>
-      <div class="page-desc">매일 자동 저장된 결과를 캘린더에서 확인하세요. 목록을 왼쪽으로 밀면(스와이프) 삭제할 수 있습니다.</div>
+      <div class="page-desc">매일 저장된 결과를 확인하세요. 목록을 왼쪽으로 밀면 삭제할 수 있습니다.</div>
 
       <div class="card">
         <div class="calendar-header">
@@ -470,12 +494,28 @@ function setCloudStatus(status) {
   const icon = document.getElementById('cloud-icon');
   const text = document.getElementById('cloud-text');
   
-  el.className = 'cloud-status ' + status;
-  if (status === 'saving') { icon.textContent = '⏳'; text.textContent = '저장 중...'; }
-  else if (status === 'synced') { icon.textContent = '☁️'; text.textContent = '동기화됨'; }
-  else if (status === 'error') { icon.textContent = '❌'; text.textContent = '오프라인/에러'; }
-  else if (status === 'loading') { icon.textContent = '🔄'; text.textContent = '불러오는 중...'; }
-  else { icon.textContent = '💻'; text.textContent = '로컬 모드'; }
+  if (el) el.className = 'cloud-status ' + status;
+  
+  if (status === 'saving') { 
+    if (icon) icon.textContent = '⏳'; 
+    if (text) text.textContent = '저장 중...'; 
+  }
+  else if (status === 'synced') { 
+    if (icon) icon.textContent = '☁️'; 
+    if (text) text.textContent = '동기화됨'; 
+  }
+  else if (status === 'error') { 
+    if (icon) icon.textContent = '❌'; 
+    if (text) text.textContent = '오프라인/에러'; 
+  }
+  else if (status === 'loading') { 
+    if (icon) icon.textContent = '🔄'; 
+    if (text) text.textContent = '불러오는 중...'; 
+  }
+  else { 
+    if (icon) icon.textContent = '💻'; 
+    if (text) text.textContent = '로컬 모드'; 
+  }
 }
 
 // ===================== ACADEMIC YEAR LOGIC =====================
@@ -589,12 +629,11 @@ function saveState() {
   localStorage.setItem(getStorageKey(), JSON.stringify(rest));
   localStorage.setItem('cleaning-app-last-year', currentYear);
 
-  // Cloud Sync (선생님 전용 Firebase 경로 적용)
+  // Cloud Sync
   if (window.firestoreDb && window.firestoreFns) {
     setCloudStatus('saving');
     clearTimeout(cloudSaveTimer);
     cloudSaveTimer = setTimeout(() => {
-      // 'cleaning_data' 컬렉션에 학년도별로 저장 (모든 기기 동기화용)
       window.firestoreFns.setDoc(
         window.firestoreFns.doc(window.firestoreDb, 'cleaning_data', 'year_' + currentYear),
         rest
@@ -604,7 +643,7 @@ function saveState() {
         console.error("Cloud Save Error:", e);
         setCloudStatus('error');
       });
-    }, 1500); // 1.5초 디바운스로 잦은 저장 방지
+    }, 1500); 
   }
 }
 
@@ -620,8 +659,11 @@ initYearInput();
 load();
 
 const todayD = new Date();
-document.getElementById('today-date').textContent =
-  todayD.getFullYear() + '.' + String(todayD.getMonth()+1).padStart(2,'0') + '.' + String(todayD.getDate()).padStart(2,'0');
+const todayEl = document.getElementById('today-date');
+if (todayEl) {
+  todayEl.textContent =
+    todayD.getFullYear() + '.' + String(todayD.getMonth()+1).padStart(2,'0') + '.' + String(todayD.getDate()).padStart(2,'0');
+}
 
 document.getElementById('needed-count').value = state.neededCount;
 document.getElementById('class-size').value = state.classSize;
@@ -639,6 +681,11 @@ function showPage(name, btn) {
   document.getElementById('page-' + name).classList.add('active');
   if (btn) btn.classList.add('active');
   
+  // 모바일에서 탭 클릭 시 자연스럽게 스크롤 맞춤
+  if(window.innerWidth <= 768 && btn) {
+     btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
   // Result 탭 진입 시 자동 업데이트
   if (name === 'result') {
     state.dutyZonesInitialized = false; 
@@ -675,7 +722,6 @@ function addStudentName() {
   const rawVal = inp.value.trim();
   if (!rawVal) return;
 
-  // 띄어쓰기, 줄바꿈(\n), 탭(\t), 쉼표(,) 등을 기준으로 분리
   const names = rawVal.split(/[\s,]+/);
   let addedCount = 0;
 
@@ -855,7 +901,6 @@ function clearDutyDay() {
 }
 
 // ===================== TODAY / LATE =====================
-// Result 탭에서도 사용하기 위해 지각 토글 공통화
 function toggleLate(idx) {
   const pos = state.lateStudents.indexOf(idx);
   if (pos >= 0) state.lateStudents.splice(pos, 1); else state.lateStudents.push(idx);
@@ -863,7 +908,7 @@ function toggleLate(idx) {
   renderResultLateGrid(); 
   
   if (document.getElementById('page-result').classList.contains('active')) {
-    buildResult(); // Update the result tab pre-stats instantly
+    buildResult();
   }
 }
 
@@ -881,7 +926,7 @@ function toggleExcludePreDist(idx) {
   if (pos >= 0) state.excludedInResult.splice(pos, 1);
   else state.excludedInResult.push(idx);
   saveState();
-  buildResult(); // Update UI
+  buildResult(); 
 }
 
 function renderResultLateGrid() {
@@ -901,10 +946,8 @@ function buildResult() {
   const dutyIdxs = (state.duty[state.todayDay] || []).slice();
   const zones = state.zones;
 
-  // 0. Render Result Late Grid
   renderResultLateGrid();
 
-  // 1. Render Today's Duty Chips (For absence checking)
   const dutyChipsEl = document.getElementById('result-duty-chips');
   if (!dutyIdxs.length) {
     dutyChipsEl.innerHTML = '<div class="empty">오늘 지정된 당번이 없습니다.</div>';
@@ -916,7 +959,6 @@ function buildResult() {
     }).join('');
   }
 
-  // 2. Stats
   const bothCount = lateIdxs.filter(i => dutyIdxs.includes(i)).length;
   const lateAvailCount = lateIdxs.filter(i => !state.excludedInResult.includes(i)).length;
   const dutyAvailCount = dutyIdxs.filter(i => !state.excludedInResult.includes(i)).length;
@@ -924,19 +966,17 @@ function buildResult() {
 
   document.getElementById('stat-row').innerHTML = `
     <div class="stat-card"><div class="stat-label">필요 인원</div><div class="stat-val">${needed}</div><div class="stat-sub">명</div></div>
-    <div class="stat-card"><div class="stat-label">지각생</div><div class="stat-val" style="color:var(--late-text)">${lateIdxs.length}</div><div class="stat-sub">명${bothCount ? ` (당번 겹침 ${bothCount}명)` : ''}</div></div>
+    <div class="stat-card"><div class="stat-label">지각생</div><div class="stat-val" style="color:var(--late-text)">${lateIdxs.length}</div><div class="stat-sub">명${bothCount ? ` (겹침 ${bothCount})` : ''}</div></div>
     <div class="stat-card"><div class="stat-label">${state.todayDay}요일 당번</div><div class="stat-val" style="color:var(--duty-text)">${dutyIdxs.length}</div><div class="stat-sub">명</div></div>
     <div class="stat-card"><div class="stat-label">배정 가능</div><div class="stat-val">${totalAvail}</div><div class="stat-sub">지각 ${lateAvailCount} + 당번 ${dutyAvailCount}</div></div>
   `;
 
   let infoHtml = '';
-  // 지각생이면서 당번인 학생 알림 (0명일 때도 항상 표시)
   infoHtml += `<div class="info-box">ℹ️ 지각생이면서 당번인 학생 ${bothCount}명은 두 역할에 각각 포함되어 최대 2구역 청소할 수 있습니다.</div>`;
   
   document.getElementById('result-info-box').innerHTML = infoHtml;
   document.getElementById('result-desc').textContent = `${state.todayDay}요일 · 구역 ${zones.length}개`;
 
-  // Always default to Late
   if (!state.dutyZonesInitialized) {
     state.dutyZones = [];
     state.dutyZonesInitialized = true;
@@ -954,7 +994,7 @@ function renderZoneTypeChips(zones) {
   if (!zones.length) { el.innerHTML = '<div class="empty">청소 구역을 먼저 설정해주세요</div>'; return; }
   el.innerHTML = zones.map((z, i) => {
     const isDuty = state.dutyZones.includes(i);
-    return `<span class="chip ${isDuty ? 'chip-duty' : 'chip-late'}" style="cursor:pointer;padding:7px 14px;font-size:13px;white-space:nowrap;justify-content:flex-start;width:280px;max-width:100%;box-sizing:border-box;" onclick="toggleDutyZone(${i})">
+    return `<span class="chip ${isDuty ? 'chip-duty' : 'chip-late'}" style="cursor:pointer;padding:8px 14px;font-size:13px;white-space:nowrap;justify-content:flex-start;width:280px;max-width:100%;box-sizing:border-box;" onclick="toggleDutyZone(${i})">
       <span style="display:inline-block;width:90px;flex-shrink:0;">${isDuty ? '🟢 당번 담당' : '🔴 지각생 담당'}</span> — ${z.name} (${z.count}명)
     </span>`;
   }).join('');
@@ -1006,8 +1046,6 @@ function distributeNow() {
 
   const assignedIdxs = new Set(assignments.flatMap(a => a.persons.map(p => p.idx)));
   
-  // 청소 당번 + 지각생 명단 안에서만 후보/귀가를 계산합니다. 
-  // 일반 학생(역할이 전혀 없는 학생)은 결과 화면에서 제외합니다.
   const allCandidates = [...new Set([...lateIdxs, ...dutyIdxs])];
   const goHomeAll = allCandidates.filter(i => !assignedIdxs.has(i));
 
@@ -1037,14 +1075,14 @@ function renderResultData() {
   wrap.innerHTML = generateResultHTML(state.resultViewMode, state.lastAssignments, state.lastGoHomeAll, state.lastAllCandidates, state.lateStudents, state.duty[state.todayDay] || [], state.dutyZones, state.studentNames);
 }
 
-// 추출된 공통 HTML 생성 함수 (현재 뷰, 모달 뷰 모두 사용)
+// 추출된 공통 HTML 생성 함수
 function generateResultHTML(mode, assignments, goHomeAll, allCandidates, lateIdxs, dutyIdxs, dutyZones, namesArr) {
   let html = '';
   const getLbl = (i) => getStudentLabel(i, namesArr);
 
   if (goHomeAll.length) {
-    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;">
-      <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px">🏠 귀가 학생 (총 ${goHomeAll.length}명) <span style="font-size:11px;font-weight:400;color:var(--text2)">(청소 배정에서 제외된 대상자)</span></div>
+    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;">
+      <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px">🏠 귀가 학생 (총 ${goHomeAll.length}명) <span style="font-size:11px;font-weight:400;color:var(--text2)">(배정에서 제외됨)</span></div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;">
         ${goHomeAll.map(i => {
           const isLate = lateIdxs.includes(i);
@@ -1064,19 +1102,22 @@ function generateResultHTML(mode, assignments, goHomeAll, allCandidates, lateIdx
     </div>`;
   }
 
+  // 모바일 테이블 깨짐 방지를 위한 감싸기
+  html += '<div class="table-responsive">';
+
   if (mode === 'zone') {
-    html += `<table class="result-table"><thead><tr><th style="width:150px">청소 구역</th><th style="width:100px">담당 유형</th><th>담당 인원</th></tr></thead><tbody>`;
+    html += `<table class="result-table"><thead><tr><th style="width:120px">청소 구역</th><th style="width:80px">유형</th><th>담당 인원</th></tr></thead><tbody>`;
     assignments.forEach(({ zone, zoneIdx, persons }) => {
       const isDutyZone = dutyZones.includes(zoneIdx);
       const typeBadge = isDutyZone ? '<span class="status-badge badge-ok">🟢 당번</span>' : '<span class="status-badge badge-warn">🔴 지각</span>';
       const personsHtml = persons.length
         ? persons.map(p => `<span class="result-chip ${p.type==='late'?'chip-late':'chip-duty'}">${getLbl(p.idx)}</span>`).join('')
-        : '<span style="color:var(--text3);font-size:12px">배정 인원 없음</span>';
+        : '<span style="color:var(--text3);font-size:12px">배정 없음</span>';
       html += `<tr><td><div class="result-zone-name">${zone.name}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${zone.count}명</div></td><td>${typeBadge}</td><td><div class="result-persons">${personsHtml}</div></td></tr>`;
     });
     html += '</tbody></table>';
   } else {
-    html += `<table class="result-table"><thead><tr><th style="width:150px">청소 대상자</th><th style="width:160px">역할</th><th>배정 구역 결과</th></tr></thead><tbody>`;
+    html += `<table class="result-table"><thead><tr><th style="width:120px">청소 대상자</th><th style="width:100px">역할</th><th>배정 구역 결과</th></tr></thead><tbody>`;
     const sortedCandidates = allCandidates.slice().sort((a, b) => a - b);
     if (sortedCandidates.length === 0) html += `<tr><td colspan=\"3\"><div class=\"empty\" style=\"padding: 24px 0;\">오늘 배정 대상(당번/지각생) 학생이 없습니다.</div></td></tr>`;
 
@@ -1118,6 +1159,7 @@ function generateResultHTML(mode, assignments, goHomeAll, allCandidates, lateIdx
     });
     html += '</tbody></table>';
   }
+  html += '</div>'; // table-responsive end
   return html;
 }
 
@@ -1172,7 +1214,7 @@ function renderCalendar() {
   for (let i = firstDay - 1; i >= 0; i--) {
     html += `<div class="cal-day other-month">${prevDays - i}</div>`;
   }
-  // Current month (로컬 시간 기준 오늘의 날짜)
+  // Current month
   const todayStr = getLocalDateString(new Date());
   
   for (let i = 1; i <= daysInMonth; i++) {
@@ -1244,21 +1286,30 @@ function deleteRecord(dateStr, id) {
   showToast('기록이 삭제되었습니다.');
 }
 
+// 렉(메모리 누수) 해결을 위해 안전하게 재작성된 스와이프 기능
 function attachSwipeEvents() {
   document.querySelectorAll('.swipe-content').forEach(el => {
+    // 중복으로 이벤트가 등록되는 것을 완벽히 방지
+    if (el.dataset.swipeAttached) return;
+    el.dataset.swipeAttached = "true";
+
     let startX = 0, currentX = 0, isDragging = false;
-    
+
     const onStart = (e) => {
-      if (e.target.closest('button')) return; // Ignore buttons
+      if (e.target.closest('button')) return;
       startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
       isDragging = true;
       el.style.transition = 'none';
     };
+    
     const onMove = (e) => {
       if (!isDragging) return;
       const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
       const delta = x - startX;
-      if (Math.abs(delta) > 10) e.preventDefault(); // Stop vertical scroll if swiping
+      
+      // 수평으로 스와이프 시 세로 스크롤 방지
+      if (Math.abs(delta) > 5 && e.cancelable) e.preventDefault(); 
+      
       if (delta < 0) {
         currentX = Math.max(delta, -80);
         el.style.transform = `translateX(${currentX}px)`;
@@ -1266,10 +1317,11 @@ function attachSwipeEvents() {
         currentX = 0; el.style.transform = `translateX(0px)`;
       }
     };
+    
     const onEnd = () => {
       if (!isDragging) return;
       isDragging = false;
-      el.style.transition = 'transform 0.2s';
+      el.style.transition = 'transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1)';
       if (currentX < -40) {
         el.style.transform = `translateX(-80px)`;
       } else {
@@ -1279,10 +1331,12 @@ function attachSwipeEvents() {
 
     el.addEventListener('mousedown', onStart);
     el.addEventListener('touchstart', onStart, {passive: true});
-    window.addEventListener('mousemove', onMove, {passive: false});
-    window.addEventListener('touchmove', onMove, {passive: false});
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
+    el.addEventListener('mousemove', onMove, {passive: false});
+    el.addEventListener('touchmove', onMove, {passive: false});
+    el.addEventListener('mouseup', onEnd);
+    el.addEventListener('touchend', onEnd);
+    el.addEventListener('mouseleave', onEnd);
+    el.addEventListener('touchcancel', onEnd);
   });
 }
 
@@ -1318,7 +1372,8 @@ function deleteRecordFromModal(dateStr, id) {
 
 // ===================== FIREBASE SYNC LOGIC =====================
 // ⭐ 선생님의 Firebase 프로젝트 설정값을 아래에 붙여넣으세요! ⭐
-const firebaseConfig = {apiKey: "AIzaSyAtOSsm4Q4ZI9b0VWu3ValyfM2w74ToNn8",
+const firebaseConfig = {
+  apiKey: "AIzaSyAtOSsm4Q4ZI9b0VWu3ValyfM2w74ToNn8",
   authDomain: "cleaning-10917.firebaseapp.com",
   projectId: "cleaning-10917",
   storageBucket: "cleaning-10917.firebasestorage.app",
@@ -1335,16 +1390,13 @@ async function syncFromCloud() {
   if (!window.firestoreDb || !window.firestoreFns) return;
   setCloudStatus('loading');
   try {
-    // 'cleaning_data' 컬렉션에서 데이터 불러오기
     const docRef = window.firestoreFns.doc(window.firestoreDb, 'cleaning_data', 'year_' + currentYear);
     const docSnap = await window.firestoreFns.getDoc(docRef);
     
     if (docSnap.exists()) {
       const cloudData = docSnap.data();
-      // 기존 state에 클라우드 데이터 병합
       Object.assign(state, cloudData);
       
-      // 화면 갱신
       document.getElementById('needed-count').value = state.neededCount;
       document.getElementById('class-size').value = state.classSize;
       renderStudentNames();
@@ -1356,7 +1408,6 @@ async function syncFromCloud() {
       
       showToast(`${currentYear}학년도 클라우드 데이터를 불러왔습니다.`);
     } else {
-      // 클라우드에 데이터가 없으면 현재 로컬 데이터를 클라우드에 최초 저장
       saveState();
     }
     setCloudStatus('synced');
@@ -1368,13 +1419,11 @@ async function syncFromCloud() {
 
 async function initFirebase() {
   try {
-    // 설정값이 입력되지 않았으면 실행 안 함
     if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("여기에")) {
       console.warn("Firebase 설정이 입력되지 않았습니다. 로컬 모드로만 작동합니다.");
       return;
     }
 
-    // Firebase 모듈 동적 임포트
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
     const { getAuth, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
     const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
@@ -1385,10 +1434,8 @@ async function initFirebase() {
     const auth = getAuth(app);
     window.firestoreDb = getFirestore(app);
 
-    // 익명 로그인 (모든 기기에서 인증 통과를 위해)
     await signInAnonymously(auth);
 
-    // 인증 상태 감지 후 초기 동기화 진행
     onAuthStateChanged(auth, async (u) => {
       window.firebaseUser = u;
       if (u) {
@@ -1402,7 +1449,6 @@ async function initFirebase() {
   }
 }
 
-// 스크립트 로드 완료 시 Firebase 초기화 실행
 initFirebase();
 
 </script>
